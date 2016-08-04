@@ -1,0 +1,48 @@
+{
+    "title": {
+        "test": "テストメッセージ",
+        "app": "App StarterKit for Image Recognition",
+        "top": "Top",
+        "image_recognition": "画像認識",
+        "predictive_analysis_invoke_sample" : "Invoke the sample Predictive Analysis Service (on IBM Bluemix)",
+        "predictive_analysis_result_list" : "Predictive Analysis Result List"
+    },
+    "label": {
+        "age": "Age",
+        "incomeLevel": "Income Level",
+        "numOfCreditCards": "Number of CreditCards",
+        "education": "Education Level",
+        "carloans" : "Car Loans",
+        "ratingResult" : "Rating Result",
+        "ratingResultConfidence" : "Rating Result Confidence",
+        "createdDate" : "Created Date"
+    },
+    "message" : {
+      "server_success" : "Invoke a Server API successfully.",
+      "server_failure" : "Failed to Invoke a Server API."
+    },
+    "validation_message": {
+        "required": "Required.",
+        "invalid": "Invalid value",
+        "invalid_number": "Invalid Number",
+        "invalid_color_pattern": "Invalid Color Pattern",
+        "invalid_mail_address": "Invalid e-mail address format",
+        "duplicate": "Existing/Duplicated name",
+        "minlength1": "1 character or more required",
+        "minlength2": "2 characters or more required",
+        "minlength3": "3 characters or more required",
+        "password_not_the_same": "Password is not the same with confirmation.",
+        "password_empty": "Password is empty.",
+        "password_required": "Password is required.",
+        "name_empty": "Name is empty."
+    },
+    "button": {
+        "reset": "Reset",
+        "ok": "OK",
+        "cancel": "Cancel",
+        "execute": "Execute",
+        "close": "Close",
+        "query_result" : "Query Stored Result List"
+
+    }
+}

@@ -1,0 +1,27 @@
+<!-- メッセージ通知エリア -->
+<div class="row">
+  <div ng-show="SharedService.messages" ng-repeat="msg in SharedService.messages" class="col-md-10 col-md-offset-1">
+    <div ng-switch="msg.level" style="margin-top:0px;margin-bottom:-15px;padding-left:0px;padding-right:0px;padding-bottom:0px;">
+      <div ng-switch-when="FATAL" class="alert alert-dismissible alert-danger">
+        <button type="button" class="close btn-xs" data-dismiss="alert">&times;</button>
+        <span class="glyphicon glyphicon-alert"></span>  {{::msg.summaryMessage}}
+      </div>
+      <div ng-switch-when="ERROR" class="alert alert-dismissible alert-danger">
+        <button type="button" class="close btn-xs" data-dismiss="alert">&times;</button>
+        <span class="glyphicon glyphicon-exclamation-sign"></span>  {{::msg.summaryMessage}}
+      </div>
+      <div ng-switch-when="WARN" class="alert alert-dismissible alert-warning">
+        <button type="button" class="close btn-xs" data-dismiss="alert">&times;</button>
+        <span class="glyphicon glyphicon-warning-sign"></span> {{::msg.summaryMessage}}
+      </div>
+      <div ng-switch-when="INFO" class="alert alert-dismissible alert-info">
+        <button type="button" class="close btn-xs" data-dismiss="alert">&times;</button>
+        <span class="glyphicon glyphicon-info-sign"></span> {{::msg.summaryMessage}}
+      </div>
+      <div ng-switch-default class="alert alert-dismissible alert-info">
+        <button type="button" class="close btn-xs" data-dismiss="alert">&times;</button>
+        <span class="glyphicon glyphicon-info-sign"></span>  {{::msg.summaryMessage}}
+      </div>
+    </div>
+  </div>
+</div>

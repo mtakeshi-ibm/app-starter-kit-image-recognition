@@ -1,0 +1,27 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- ナビゲーションバーヘッダ部分 -->
+    <div class="nav-header">
+      <!-- Top logo。 状態[home]へ遷移 -->
+      <a class="navbar-brand" ng-attr-title="Title"  ui-sref="home"><span translate="title.top" /></a>
+      <!--トグルボタン(画面幅が小さくなった場合にのみ表示されるナビゲーションボタン) -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-content">
+          <!--3つ並べてバーガーアイコンボタン3本分 -->
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <!-- ナビゲーションバー中央部分 -->
+    <div id="nav-content" class="collapse navbar-collapse">
+
+      <ul class="nav navbar-nav">
+          <li><a ui-sref="predictive_analysis"><span class="glyphicon glyphicon-th-list"></span> <span translate="title.predictive_analysis"/></a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+      </ul>
+    </div>
+  </div>
+</nav>

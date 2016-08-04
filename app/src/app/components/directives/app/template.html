@@ -1,0 +1,14 @@
+<!-- header section (AngularJS View which is provided by AngularJS) -->
+<div ui-view="header"></div>
+
+<!-- main section (sidepanel and content area)-->
+<div class="container-fluid">
+  <!-- 下記style属性でのpaddingは、headerのナビゲーションバーでnavbr-fixed-topを指定しているため、下に潜り込まないようにするための必須指定 -->
+  <div class="row" style="padding: 60px 0 0 0">
+    <div class="col-sm-3 col-md-2 sidebar" ui-view="sidepanel"></div>
+    <div class="col-sm-9 col-md-10 main" ui-view="content"></div>
+  </div>
+</div>
+
+<!-- footer section -->
+<div ui-view="footer"></div>

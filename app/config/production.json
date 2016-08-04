@@ -1,0 +1,28 @@
+{
+    "app" : {
+      "global" :{
+        "keep_uploaded_image_files" : false,
+        "keep_generated_training_zip_files" : false
+      }
+    },
+    "log4js": {
+        "appenders": [{
+            "category": "access",
+            "type": "console"
+        }, {
+            "category": "app",
+            "type": "console"
+        }, {
+            "category": "system",
+            "type": "console"
+        }, {
+            "type": "console"
+        }],
+        "levels": {
+            "access": "ALL",
+            "app": "ALL",
+            "system": "ALL",
+            "error": "ALL"
+        }
+    }
+}
