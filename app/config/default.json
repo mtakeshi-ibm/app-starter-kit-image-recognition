@@ -1,17 +1,6 @@
 {
     "app": {
         "global": {
-            "predictive_service": {
-                "sample": {
-                    "service_instance_name": "Predictive Analytics-x0",
-                    "context_id": "modelingintro_sample_model",
-                    "table_name": "tree_credit.sav",
-                    "header_layout": ["Age", "Income level", "Number of credit cards", "Education", "Car loans"]
-                }
-            },
-            "cloudant_database_name": "predictive_result",
-            "dashdb_schema_name": "DASH107720",
-            "dashdb_table_name": "PREDICTIVE_RESULT",
             "request_debug": true,
             "keep_uploaded_image_files": false,
             "keep_generated_training_zip_files": false
@@ -49,26 +38,9 @@
     "bluemix_service": {
         "watson_visualrecognition_v3": {
             "baseUrl": "https://gateway-a.watsonplatform.net/visual-recognition/api",
-            "apiKey": "fa4a5ed28d731a3a853a361ef9c93a206fce46f9",
-            "description": "on space 'dev'",
+            "apiKey": null,
             "version" : "2016-05-17",
             "default_threshold" : 0.5
-        },
-        "predictive_analytics": {
-            "baseUrl": "https://palbyp.pmservice.ibmcloud.com/pm/v1",
-            "apiKey": "Zmv6K5JDNT52FtapKmPI5syVYaQmHeWWtssfbWoPNhoT1SV+cTLlXbxeFf6bRdM0HxGxQ3pIogjgEOjN0TGDTcL0h32gVzPkwMbmHXNpi+HCwrr3HxZMiSKeG4IwlAmkcD22xWsTdLNxbus+jtEgWP1AIGKvkj+PKGM737KvHyE=",
-            "description": "Predictive Analytics-x0"
-        },
-        "cloudant": {
-            "baseUrl": "https://637af2ab-0884-4813-8b8f-0145b9a8b3ad-bluemix:ff313d4e9cd85a3787988ebfd99689d5abee2b34dc9a5cdbbc3307cbcb68fee2@637af2ab-0884-4813-8b8f-0145b9a8b3ad-bluemix.cloudant.com",
-            "host": "637af2ab-0884-4813-8b8f-0145b9a8b3ad-bluemix.cloudant.com",
-            "port": 443,
-            "username": "637af2ab-0884-4813-8b8f-0145b9a8b3ad-bluemix",
-            "password": "ff313d4e9cd85a3787988ebfd99689d5abee2b34dc9a5cdbbc3307cbcb68fee2",
-            "description": "Cloudant NoSQL DB-y9"
-        },
-        "dashdb": {
-            "connectionString": "DRIVER={DB2};DATABASE=BLUDB;HOSTNAME=bluemix05.bluforcloud.com;PORT=50000;PROTOCOL=TCPIP;UID=dash107720;PWD=uq3qG2s5gwjy;"
         }
     }
 }

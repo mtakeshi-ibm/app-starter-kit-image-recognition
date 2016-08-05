@@ -53,6 +53,7 @@
     "config": "1.21.0",
     "cookie-parser": "1.4.3",
     "cors": "2.7.1",
+    "dotenv": "2.0.0",
     "express": "4.14.0",
     "i18n": "0.8.3",
     "jquery": "2.2.4",

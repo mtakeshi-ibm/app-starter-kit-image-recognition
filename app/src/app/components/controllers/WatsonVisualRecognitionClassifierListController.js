@@ -44,7 +44,11 @@ export class WatsonVisualRecognitionClassifierListController {
             rowHeight: 44,
             columnDefs: [{
                 field: 'name',
-                displayName: this.$translate.instant('label.text_100')
+                displayName: this.$translate.instant('label.text_100'),
+                sort: {
+                    priority: 0,
+                    direction: 'asc'
+                }
             }, {
                 field: 'classifier_id',
                 displayName: this.$translate.instant('label.text_101')
@@ -53,11 +57,22 @@ export class WatsonVisualRecognitionClassifierListController {
                 displayName: this.$translate.instant('label.text_102')
             }, {
                 field: 'status',
-                displayName: this.$translate.instant('label.text_103')
+                displayName: this.$translate.instant('label.text_103'),
+                cellClass: function (grid, row) {
+                  if (row.entity.status === 'failed') {
+                    return 'text-danger';
+                  } else if (row.entity.status === 'training') {
+                    return 'text-info';
+                  } else if (row.entity.status === 'ready') {
+                    return 'text-primary';
+                  } else {
+                    return 'text-default';
+                  }
+                }
             }, {
                 field: 'created',
                 displayName: this.$translate.instant('label.text_104'),
-                cellFilter: 'date: "yyyy/MM/dd"'
+                cellFilter: 'date: "yyyy/MM/dd HH:mm:ss"'
             }, {
                 field: 'owner',
                 displayName: this.$translate.instant('label.text_108')

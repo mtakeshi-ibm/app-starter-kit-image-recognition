@@ -1,5 +1,7 @@
 //CloudFoundry環境かどうかを認識するための便利モジュールcfenvを利用
 const cfenv = require('cfenv');
+// dotenvモジュールにより環境変数を反映
+require('dotenv').load();
 
 //※ Node.jsネイティブでのES6対応は、importには対応してない。よって右の表記はNG → import apiServer from "./json-api-server";
 const apiServer = require('./json-api-server');

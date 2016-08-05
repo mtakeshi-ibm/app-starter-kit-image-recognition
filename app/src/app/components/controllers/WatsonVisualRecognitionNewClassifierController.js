@@ -75,24 +75,24 @@ export class WatsonVisualRecognitionNewClassifierController {
     isReadyToCreateClassifier() {
 
         if (!this.classifierName) {
-          //classifierNameが未入力ならNG
+            //classifierNameが未入力ならNG
+            return false;
+        }
+
+        // negativeExamplesのイメージ数が10に満たない場合はNG
+        if (this.negativeExamples.length < 10) {
           return false;
         }
 
-        // // negativeExamplesのイメージ数が1に満たない場合はNG
-        // if (this.negativeExamples.length < 1) {
-        //   return false;
-        // }
-
         //positiveExamplesの各イメージ数が10に満たない場合はNG
-        this.positiveExamplesArray.forEach( (value) => {
-          if (value.positiveExamples && value.positiveExamples.length < 1) {
-            return false;
-          }
-          //各クラス名が設定されていないならNG
-          if (!value.className) {
-            return false;
-          }
+        this.positiveExamplesArray.forEach((value) => {
+            if (value.positiveExamples && value.positiveExamples.length < 10) {
+                return false;
+            }
+            //各クラス名が設定されていないならNG
+            if (!value.className) {
+                return false;
+            }
         });
 
         return true;
@@ -124,7 +124,7 @@ export class WatsonVisualRecognitionNewClassifierController {
             arrayKey: '', //HTML5での単一inputからの複数ファイルアップロード時、itemname[i]という項目名でサーバに送信されるとmulterがハンドリングできずエラーになる問題に対処
             data: this._createSendData()
         }).then((resp) => {
-            this.$log.info('Success uploaded. Response: ' + angular.toJson(resp.data));
+            this.$log.info('Uploaded succesfully. Response data = ' + angular.toJson(resp.data));
             this.$scope.elapsedTime = resp.data.elapsedTime;
 
             //正常応答の場合、応答データJSONオブジェクトをセット
@@ -136,7 +136,9 @@ export class WatsonVisualRecognitionNewClassifierController {
             this.SharedService.addInfoMessage(this.$translate.instant('message.text_011'));
         }, (resp) => {
             //うまくresolve出来なかった場合。
-            this.SharedService.addErrorMessage(resp.status + ':' + resp.data.error);
+            this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status', {
+                'status': resp.status
+            }));
             this.$log.error('Error status: ' + resp.status);
         }, (evt) => {
             //const progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -164,36 +166,36 @@ export class WatsonVisualRecognitionNewClassifierController {
     /**
      * positiveExampleで指定するクラス定義を1つ追加する
      */
-    addClassDef(){
-      const positiveExampleDef = {};
-      positiveExampleDef.className = "";
-      positiveExampleDef.positiveExamples = [];
-      this.positiveExamplesArray.push(positiveExampleDef);
+    addClassDef() {
+        const positiveExampleDef = {};
+        positiveExampleDef.className = "";
+        positiveExampleDef.positiveExamples = [];
+        this.positiveExamplesArray.push(positiveExampleDef);
     }
 
     /**
      * positiveExampleの最後のクラスを削除する
      */
-    removeLastClassDef(){
-      if (this.positiveExamplesArray.length >= 1 ){
-        this.positiveExamplesArray.pop();
-      }
+    removeLastClassDef() {
+        if (this.positiveExamplesArray.length >= 1) {
+            this.positiveExamplesArray.pop();
+        }
     }
 
     /**
      *
      */
     _createSendData() {
-      const data = {};
+        const data = {};
 
-      this.positiveExamplesArray.forEach( (value) => {
-        data[value.className + '_positiveExamples'] = value.positiveExamples;
-      });
+        this.positiveExamplesArray.forEach((value) => {
+            data[value.className + '_positiveExamples'] = value.positiveExamples;
+        });
 
-      data['negativeExamples'] = this.negativeExamples;
-      data['classifierName'] = this.classifierName;
+        data['negativeExamples'] = this.negativeExamples;
+        data['classifierName'] = this.classifierName;
 
-      return data;
+        return data;
     }
 
 }

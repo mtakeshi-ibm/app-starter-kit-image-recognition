@@ -84,28 +84,35 @@
         <div class="form-group form-group-sm">
             <div class="row" ng-show="elapsedTime.length >= 2">
                 <!-- サーバ側Node.jsからみた、WatsonVR API応答時間結果が正しくセットされていれば表示 -->
-                <span class="label label-primary"><span translate="label.text_025"></span>{{ elapsedTime[0] + '.'+ elapsedTime[1]/1000000 }}</span>
+                <span class="label label-default"><span translate="label.text_025"></span>{{ elapsedTime[0] + '.'+ elapsedTime[1]/1000000 }}</span>
             </div>
 
+            <!-- 結果が返された場合にのみ表示されるブロック -->
             <div ng-show="controller.createdClassifier">
-                <div class="form-group">
-                    <label class="control-label" for="newclassifier_name"><span translate="label.text_027"></span></label>
-                    <input id="newclassifier_name" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.name"></input>
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr class="info">
+                                <th><span translate="label.text_027"></span></th>
+                                <th><span translate="label.text_026"></span></th>
+                                <th><span translate="label.text_103"></span></th>
+                                <th><span translate="label.text_104"></span></th>
+                                <th><span translate="label.text_108"></span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ controller.createdClassifier.name }}</td>
+                                <td>{{ controller.createdClassifier.classifier_id }}</td>
+                                <td>{{ controller.createdClassifier.status }}</td>
+                                <td>{{ controller.createdClassifier.created | date:'yyyy/MM/dd HH:mm:ss' }}</td>
+                                <td>{{ controller.createdClassifier.owner }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label" for="newclassifier_id"><span translate="label.text_026"></span></label>
-                    <input id="newclassifier_id" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.classifier_id"></input>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="newclassifier_created"><span translate="label.text_104"></span></label>
-                    <input id="newclassifier_created" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.created"></input>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="newclassifier_owner"><span translate="label.text_108"></span></label>
-                    <input id="newclassifier_owner" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.owner"></input>
-                </div>
             </div>
 
         </div>
