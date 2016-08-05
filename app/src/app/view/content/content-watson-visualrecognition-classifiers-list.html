@@ -1,0 +1,30 @@
+<div class="container-fluid">
+
+    <div class="row">
+        <!-- ジャンボトロンによるWelcomeメッセージ -->
+        <div class="jumbotron text-center">
+            <h2><span translate="title.menu_01_01"></span></h2>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <app-messages />
+    </div>
+
+    <div class="row">
+        <button type="button" class="btn btn-default" ng-click="controller.listClassifiers()"><span translate="label.text_001"></button>
+    </div>
+
+    <div class="row">
+        <label><span translate="label.text_002"></span></label><span ng-repeat="classifier in controller.selectedClassifiers" class="label label-primary">{{ classifier.name }}</span>
+    </div>
+
+    <div class="row"></div>
+
+    <div class="row">
+        <!-- ui-gridによる高機能テーブル -->
+        <div ui-grid="gridOptions" ui-grid-selection ui-grid-resize-columns ui-grid-pagination ui-grid-exporter class="grid"></div>
+    </div>
+
+</div>

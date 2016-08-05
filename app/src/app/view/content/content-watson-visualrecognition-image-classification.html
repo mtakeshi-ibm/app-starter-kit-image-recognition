@@ -1,0 +1,78 @@
+<div class="container-fluid">
+
+    <!-- ジャンボトロンによるWelcomeメッセージ -->
+    <div class="jumbotron text-center">
+      <h2><span translate="title.menu_01_03"></span></h2>
+    </div>
+
+    <div class="row">
+        <app-messages />
+    </div>
+
+    <form name="form" novalidate enctype="multipart/form-data">
+
+      <div class="form-group form-group-sm">
+        <label class="control-label" for="targetFileInput"><span translate="label.text_006"></span></label>
+        <input id="targetFileInput" type="file" class="form-control" ngf-select ng-model="controller.targetFile" ngf-multiple="true" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="300MB" />
+        <div ngf-drop ng-model="controller.targetFile" class="drop-box"><span translate="label.text_005"></span></div>
+        <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
+        <table class="table">
+          <tr>
+            <th ng-repeat="i in controller.targetFile"># {{$index + 1}}</th>
+          </tr>
+          <tr>
+            <td ng-repeat="i in controller.targetFile">
+              <!-- <img ngf-thumbnail="controller.targetFile[i]" /> -->
+              <img ngf-thumbnail="i" />
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="form-group">
+        <div class="form-group">
+          <label class="control-label" for="targetOwner"><span translate="label.text_007"></span></label>
+          <div id="targetOwner" class="btn-group">
+            <label class="btn btn-primary" ng-model="controller.enableOwnerIBM" uib-btn-checkbox><span translate="label.text_008"></span></label>
+            <label class="btn btn-primary" ng-model="controller.enableOwnerMe" uib-btn-checkbox><span translate="label.text_009"></span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="targetClassTypeButtonGroup"><span translate="label.text_010"></span></label>
+          <div id="targetClassTypeButtonGroup" class="btn-group">
+            <label class="btn btn-success" ng-model="controller.targetClassesType" uib-btn-radio="controller.GlobalConstants.TARGET_CLASS_TYPE_ALL"><span translate="label.text_011"></span></label>
+            <label class="btn btn-success" ng-model="controller.targetClassesType" uib-btn-radio="controller.GlobalConstants.TARGET_CLASS_TYPE_SPECIFIED"><span translate="label.text_012"></span></label>
+          </div>
+        </div>
+        <!-- -->
+        <div ng-show="controller.GlobalConstants.TARGET_CLASS_TYPE_SPECIFIED === controller.targetClassesType">
+          <label><span translate="label.text_014"></span></label>
+          <span ng-repeat="classifier in controller.getSelectedClassifiers()" class="label label-primary">{{ classifier.name }}</span>
+          <div ng-if="controller.getSelectedClassifiers() <= 0"><span translate="label.text_017"></span></div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': form.threshold.$dirty && form.threshold.$invalid}">
+          <label class="control-label" for="threshold"><span translate="label.text_015"></span></label>
+          <span class="help-inline text-danger" ng-messages="form.threshold.$error" ng-if="form.threshold.$dirty || form.$submitted">
+            <span ng-message="number">Not a number</span>
+            <span ng-message="min">less than zero</span>
+            <span ng-message="max">greater than 1.0</span>
+          </span>
+          <input id="threshold" name="threshold" type="number" min="0" max="1.0" class="form-control" placeholder="threshold" ng-model="controller.threshold" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary" ng-click="controller.upload()" ng-disabled="(!(controller.targetFile) || controller.targetFile.length === 0)" ><span translate="label.text_016" /></button>
+      </div>
+      <div class="row" ng-show="elapsedTime.length >= 2" >
+        <!-- サーバ側Node.jsからみた、WatsonVR API応答時間結果が正しくセットされていれば表示 -->
+        <span class="label label-primary"><span translate="label.text_013"></span>{{ elapsedTime[0] + '.'+ elapsedTime[1]/1000000 }}</span>
+      </div>
+
+      <div class="row">
+        <div ui-grid="gridOptions" ui-grid-grouping ui-grid-resize-columns ui-grid-exporter class="grid"></div>
+      </div>
+
+    </form>
+
+</div>

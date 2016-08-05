@@ -1,0 +1,115 @@
+<div class="container-fluid">
+
+    <!-- ジャンボトロンによるWelcomeメッセージ -->
+    <div class="jumbotron text-center">
+        <h2><span translate="title.menu_01_02"></span></h2>
+    </div>
+
+    <div class="row">
+        <app-messages />
+    </div>
+
+    <form name="form" novalidate enctype="multipart/form-data">
+
+        <!-- 全体のClassifierの名前 -->
+        <div class="form-group form-group-sm" ng-class="{'has-error': form.classifierName.$dirty && form.classifierName.$invalid}">
+            <label class="control-label" for="classifierName"><span translate="label.text_018"></span></label>
+            <span class="help-inline text-danger" ng-messages="form.classifierName.$error" ng-if="form.classifierName.$dirty || form.$submitted">
+            <span ng-message="required"><span translate="validation_message.required"></span></span>
+            <span ng-message="pattern"><span translate="validation_message.invalid_pattern"></span></span>
+            <span ng-message="minlength"><span translate="validation_message.minlength"></span></span>
+            </span>
+            <input id="classifierName" name="classifierName" type="text" class="form-control" ng-model="controller.classifierName" ng-required="true" ng-pattern="/^[a-zA-Z0-9]+$/" ng-trim="true" placeholder="New Classifier Name"></input>
+        </div>
+
+        <!-- 複数のClassの名前 -->
+        <div class="form-group form-group-sm" ng-repeat="positiveExample in controller.positiveExamplesArray" style="border: 1px #e4e4e4 solid; margin-top:5px; margin-bottom:5px;padding-left:5px; padding-right:5px; padding-bottom:5px;">
+            <ng-form name="innerForm">
+                <div class="form-group form-group-sm" ng-class="{'has-error': innerForm.className.$dirty && innerForm.className.$invalid}">
+                    <label class="control-label" for="classifierName_{{$index}}"><span translate="label.text_019"></span></label>
+                    <span class="help-inline text-danger" ng-messages="innerForm.className.$error">
+                    <span ng-message="required"><span translate="validation_message.required"></span></span>
+                    <span ng-message="pattern"><span translate="validation_message.invalid_pattern"></span></span>
+                    <span ng-message="minlength"><span translate="validation_message.minlength"></span></span>
+                    </span>
+                    <input id="classifierName_{{$index}}" name="className" type="text" class="form-control" ng-model="positiveExample.className" ng-required="true" ng-pattern="/^[a-zA-Z0-9]+$/" ng-trim="true" placeholder="New Class Name"></input>
+                </div>
+            </ng-form>
+            <div class="form-group form-group-sm">
+                <label class="control-label" for="positiveExamples"><span translate="label.text_020"></span></label>
+                <input id="positiveExample_{{$index}}" type="file" class="form-control" ngf-select ng-model="positiveExample.positiveExamples" ngf-multiple="true" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="50MB" />
+            </div>
+            <div ngf-drop ng-model="positiveExample.positiveExamples" class="drop-box"><span translate="label.text_005"></span></div>
+            <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
+            <table class="table">
+                <tr>
+                    <th ng-repeat="i in positiveExample.positiveExamples"># {{$index + 1}}</th>
+                </tr>
+                <tr>
+                    <td ng-repeat="i in positiveExample.positiveExamples">
+                        <img ngf-src="i" ngf-resize="{width: 50, height: 50}" />
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="form-group form-group-sm">
+            <!-- アップロード＆新規分類器作成ボタン -->
+            <button type="button" class="btn btn-primary" ng-click="controller.addClassDef()"><span translate="label.text_022"></span></button>
+            <button type="button" class="btn btn-danger" ng-disabled="controller.positiveExamplesArray.length <= 1" ng-click="controller.removeLastClassDef()"><span translate="label.text_023"></span></button>
+        </div>
+
+        <p/>
+        <div class="form-group form-group-sm">
+            <label class="control-label" for="negativeExamples"><span translate="label.text_021"></span></label>
+            <input id="negativeExamples" type="file" class="form-control" ngf-select ng-model="controller.negativeExamples" ngf-multiple="true" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="50MB" />
+        </div>
+        <div ngf-drop ng-model="controller.negativeExamples" class="drop-box"><span translate="label.text_005"></span></div>
+        <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
+        <table class="table">
+            <tr>
+                <th ng-repeat="i in controller.negativeExamples"># {{$index + 1}}</th>
+            </tr>
+            <tr>
+                <td ng-repeat="i in controller.negativeExamples">
+                    <img ngf-src="i" ngf-resize="{width: 50, height: 50}" />
+                </td>
+            </tr>
+        </table>
+        <div class="form-group form-group-sm">
+            <!-- アップロード＆新規分類器作成ボタン -->
+            <button type="button" class="btn btn-primary" ng-disabled="form.$dirty && form.$invalid && !controller.isReadyToCreateClassifier()" ng-click="controller.createNewClassifier()"><span translate="label.text_024"></span></button>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="row" ng-show="elapsedTime.length >= 2">
+                <!-- サーバ側Node.jsからみた、WatsonVR API応答時間結果が正しくセットされていれば表示 -->
+                <span class="label label-primary"><span translate="label.text_025"></span>{{ elapsedTime[0] + '.'+ elapsedTime[1]/1000000 }}</span>
+            </div>
+
+            <div ng-show="controller.createdClassifier">
+                <div class="form-group">
+                    <label class="control-label" for="newclassifier_name">Created Classifier Name</label>
+                    <input id="newclassifier_name" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.name"></input>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="newclassifier_id">Created Classifier Id</label>
+                    <input id="newclassifier_id" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.classifier_id"></input>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="newclassifier_created">Created Datetime</label>
+                    <input id="newclassifier_created" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.created"></input>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="newclassifier_owner">Owner</label>
+                    <input id="newclassifier_owner" class="form-control" ng-readonly="true" ng-model="controller.createdClassifier.owner"></input>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

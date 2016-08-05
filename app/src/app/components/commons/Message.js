@@ -3,11 +3,6 @@
  */
 export default class Message {
 
-  public level:string;
-  public summaryMessage:string;
-  public detailMessage:string;
-  public targetId:string;
-
   /**
    * コンストラクタ
    */

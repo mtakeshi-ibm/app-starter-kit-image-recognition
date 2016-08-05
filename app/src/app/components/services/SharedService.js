@@ -16,6 +16,9 @@ class SharedService {
     this.appScope = {};
   }
 
+  /**
+   * メッセージをセットします。
+   */
   setMessages(messages) {
     if (messages && messages.length > 0) {
       this.messages = messages;

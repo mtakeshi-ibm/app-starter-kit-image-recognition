@@ -1,5 +1,4 @@
 // This file is referred from 'webpack.config.js'
-
 //load jquery
 import 'jquery/dist/jquery.min';
 

@@ -1,5 +1,3 @@
-//import ...
-
 /**
  * RouteConfigクラス (実際にはクラスとして作成しても、appModule.config(obj)の引数に指定できるのはファクトリ関数オブジェクトでしかない。
  * そのため、本来的にはクラスとして作成する必要も意味はないが、統一性のためあえてクラス化している。
@@ -23,7 +21,7 @@ class RouteConfig {
                     controllerAs: 'controller'
                 },
                 'sidepanel': {
-                    template: require('./view/sidepanel/sidepanel-image-recognition.html'),
+                    template: require('./view/sidepanel/sidepanel-menu_01.html'),
                     controller: 'MainController',
                     controllerAs: 'controller'
                 },
@@ -42,10 +40,10 @@ class RouteConfig {
         });
 
         /*
-         * watson
+         * メニュー01 (最上位トップ)
          */
-        $stateProvider.state('image_recognition', {
-            url: "/image_recognition",
+        $stateProvider.state('menu_01', {
+            url: "/menu_01",
             views: {
                 'header': {
                     template: require('./view/header/header.html'),
@@ -53,12 +51,12 @@ class RouteConfig {
                     controllerAs: 'controller'
                 },
                 'sidepanel': {
-                    template: require('./view/sidepanel/sidepanel-image-recognition.html'),
+                    template: require('./view/sidepanel/sidepanel-menu_01.html'),
                     controller: 'MainController',
                     controllerAs: 'controller'
                 },
                 'content': {
-                    template: require('./view/content/content-default.html'),
+                    template: require('./view/content/content-menu_01-top.html'),
                     controller: 'MainController',
                     controllerAs: 'controller'
                 },
@@ -71,14 +69,42 @@ class RouteConfig {
         });
 
         /*
-         * watson.visual_recognition
+         * メニュー01 > サブメニュー01
          */
-        $stateProvider.state('predictive_analysis.invoke_sample', {
-            url: "/invoke_predictive_analysis_sample",
+        $stateProvider.state('menu_01.01', {
+            url: "/menu_01_01",
             views: {
                 'content@': {
-                    template: require('./view/content/content-default.html'),
-                    controller: 'PredictiveAnalysisInvokeSampleController',
+                    template: require('./view/content/content-watson-visualrecognition-classifiers-list.html'),
+                    controller: 'WatsonVisualRecognitionClassifierListController',
+                    controllerAs: 'controller'
+                }
+            }
+        });
+
+        /*
+         * メニュー01 > サブメニュー02
+         */
+        $stateProvider.state('menu_01.02', {
+            url: "/menu_01_02",
+            views: {
+                'content@': {
+                    template: require('./view/content/content-watson-visualrecognition-new-classifier.html'),
+                    controller: 'WatsonVisualRecognitionNewClassifierController',
+                    controllerAs: 'controller'
+                }
+            }
+        });
+
+        /*
+         * メニュー01 > サブメニュー03
+         */
+        $stateProvider.state('menu_01.03', {
+            url: "/menu_01_03",
+            views: {
+                'content@': {
+                    template: require('./view/content/content-watson-visualrecognition-image-classification.html'),
+                    controller: 'WatsonVisualRecognitionImageClassificationController',
                     controllerAs: 'controller'
                 }
             }

@@ -1,7 +1,11 @@
 'use strict';
 // ハンドラ関数オブジェクトをインポート
-//const PredictiveAnalysisScoringHandlerFunction = require('../handlers/PredictiveAnalysisScoringHandlerFunction');
-//const PredictiveAnalysisQueryResultsHandlerFunction = require('../handlers/PredictiveAnalysisQueryResultsHandlerFunction');
+const GetClassifierHandlerFunction = require('../handlers/GetClassifierHandlerFunction');
+const ClassifyImageHandlerFunction = require('../handlers/ClassifyImageHandlerFunction');
+const DeleteClassifierHandlerFunction = require('../handlers/DeleteClassifierHandlerFunction');
+const CreateClassifierHandlerFunction = require('../handlers/CreateClassifierHandlerFunction');
+
+
 
 const cfenv = require('cfenv');
 const express = require('express');
@@ -40,15 +44,34 @@ router.get('/api/test', (req, res) => {
     });
 });
 
-/*
- * ルーティング：スコアリングサービスの呼び出し
- */
-//router.post('/api/predictiveAnalysis/score/:servicename', PredictiveAnalysisScoringHandlerFunction);
 
 /*
- * ルーティング：dashDB結果データ全件クエリ
+ * ルーティング：classifiers一覧取得
  */
-//router.get('/api/predictiveAnalysis/result', PredictiveAnalysisQueryResultsHandlerFunction);
+router.get('/api/classifiers', GetClassifierHandlerFunction);
+
+/*
+ * ルーティング：classifier削除
+ */
+router.delete('/api/classifiers/:classifier_id', DeleteClassifierHandlerFunction);
+
+/*
+ * ルーティング：分類操作。マルチパートアップロードであることが前提
+ */
+//router.post('/api/classify', uploadedFiles.any(), ClassifyImageHandlerFunction);
+//router.post('/api/classify', uploadedFiles.single('uploadFile'), ClassifyImageHandlerFunction);
+router.post('/api/classify', uploadedFiles.array('uploadFiles'), ClassifyImageHandlerFunction);
+
+/**
+ * ルーティング:新規クラス分類器の作成(トレーニング)。マルチパートアップロードであることが前提。
+ * 複数のフォーム名で、それぞれ複数の画像ファイルがアップロードされてくる
+ */
+// router.post('/api/classifier', uploadedFiles.fields([{
+//     name: 'positiveExamples'
+// }, {
+//     name: 'negativeExamples'
+// }]), CreateClassifierHandlerFunction);
+router.post('/api/classifier', uploadedFiles.any(), CreateClassifierHandlerFunction);
 
 //Routerインスタンスをエクスポート
 module.exports = router;
