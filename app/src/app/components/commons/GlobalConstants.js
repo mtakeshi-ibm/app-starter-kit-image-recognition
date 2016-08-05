@@ -8,6 +8,17 @@ class GlobalConstants {
      */
     constructor() {
         //
+        //キャッシュされたクラス分類器の配列オブジェクトが格納されているキー文字列
+        this.CASHED_CLASSIFIERS = "_CACHED_CLASSIFIERS_";
+
+        //現在選択中のクラス分類器の配列を、appScopeに格納するキー名
+        this.SELECTED_CLASSIFIERS = "_SELECTED_CLASSIFIERS_";
+
+        this.TARGET_CLASS_TYPE_ALL = "ALL";
+
+        this.TARGET_CLASS_TYPE_SPECIFIED = "SPECIFIED";
+
+
         this.SAMPLE_PREDICTIVE_DATA_STRUCTURE_INCOME_LEVELS = ["Low", "Medium", "High"];
         this.SAMPLE_PREDICTIVE_DATA_STRUCTURE_NUM_OF_CREDIT_CARDS_LEVELS = ["Less than 5", "5 or more"];
         this.SAMPLE_PREDICTIVE_DATA_STRUCTURE_EDUCATION_LEVELS = ["College", "High school"];

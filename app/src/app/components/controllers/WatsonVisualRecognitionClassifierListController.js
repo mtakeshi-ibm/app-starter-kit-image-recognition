@@ -22,7 +22,7 @@ export class WatsonVisualRecognitionClassifierListController {
 
         this.$scope.classifiers = [];
 
-        this.$log.debug("constructor of Class WatsonVisualRecognitionClassifierListController is called.");
+        //this.$log.debug("constructor of Class WatsonVisualRecognitionClassifierListController is called.");
 
         //アプリセッション領域から、キャッシュ情報を取得(前にセットしている用)
         this.cachedClassifiers = SharedService.getApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS);
@@ -37,8 +37,6 @@ export class WatsonVisualRecognitionClassifierListController {
             //空の配列をセット
             this.selectedClassifiers = [];
         }
-
-        this.$log.info(this.$translate.instant('label.text_100'));
 
         //ui-grid表設定オブジェクト
         this.$scope.gridOptions = {
@@ -66,7 +64,14 @@ export class WatsonVisualRecognitionClassifierListController {
             }, {
                 name: 'Delete',
                 displayName: this.$translate.instant('label.text_105'),
-                cellTemplate: '<div class="ui-grid-cell-contents"><button type="button" class="btn btn-danger btn-sm" data-container="body" data-toggle="popover" data-placement="center" ng-disabled="row.entity.owner === \'IBM\'" ng-click="grid.appScope.deleteClassifier(row.entity)">Delete</button></div>',
+                cellTemplate: `<div class="ui-grid-cell-contents" style="text-align:center;">
+                <button type="button"
+                 class="btn btn-danger btn-sm" data-container="body"
+                 data-toggle="popover"
+                 data-placement="center"
+                 ng-disabled="row.entity.owner === \'IBM\'"
+                 ng-click="grid.appScope.deleteClassifier(row.entity)"><span translate="label.text_105"></span></button>
+                 </div>`,
                 //cellTemplate: '<div class="ui-grid-cell-contents"><button type="button" class="btn btn-danger btn-sm" data-container="body" data-toggle="popover" data-placement="center" ng-click="grid.appScope.deleteClassifier(row.entity)">Delete</button></div>',
                 enableFiltering: false
             }],
@@ -175,7 +180,6 @@ export class WatsonVisualRecognitionClassifierListController {
         //メッセージクリア
         this.clearMessages();
 
-        this.$log.debug("function listClassifiers is called.");
         //this.SharedService.addFatalMessage('Hello, Fatal!', null);
 
         // API呼び出し
@@ -189,9 +193,8 @@ export class WatsonVisualRecognitionClassifierListController {
             //データをキャッシュ
             this.cachedClassifiers = respdata.data.classifers;
 
-            //アプリセッションにセット
-            this.SharedService.setApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS, respdata.data.classifiers);
-
+            //アプリセッションにセット(_modifyReceivedDataで処理したあとのデータをセットする)
+            this.SharedService.setApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS, this.$scope.gridOptions.data);
             //
             if (respdata.data !== null && (WatsonVisualRecognitionClassifierListController.isType('Array', respdata.data.classifiers) && respdata.data.classifiers.length === 0)) {
                 this.SharedService.addWarnMessage('No Classifiers.');

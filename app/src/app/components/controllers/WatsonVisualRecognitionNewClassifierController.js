@@ -19,13 +19,14 @@ export class WatsonVisualRecognitionNewClassifierController {
      * @param  {type} WatsonVisualRecognitionV3Service description
      * @return {type}                                description
      */
-    constructor($window, $location, $scope, $log, uiGridConstants, Upload, GlobalConstants, SharedService, WatsonVisualRecognitionV3Service) {
+    constructor($window, $location, $scope, $log, $translate, uiGridConstants, Upload, GlobalConstants, SharedService, WatsonVisualRecognitionV3Service) {
         'ngInject';
 
         //this.$log.debug("constructor of Class WatsonVisualRecognitionNewClassifierController is called.");
 
         this.$scope = $scope;
         this.$log = $log;
+        this.$translate = $translate;
         this.uiGridConstants = uiGridConstants;
         this.Upload = Upload;
         this.GlobalConstants = GlobalConstants;
@@ -78,14 +79,14 @@ export class WatsonVisualRecognitionNewClassifierController {
           return false;
         }
 
-        // negativeExamplesのイメージ数が10に満たない場合はNG
-        if (this.negativeExamples.length < 10) {
-          return false;
-        }
+        // // negativeExamplesのイメージ数が1に満たない場合はNG
+        // if (this.negativeExamples.length < 1) {
+        //   return false;
+        // }
 
         //positiveExamplesの各イメージ数が10に満たない場合はNG
         this.positiveExamplesArray.forEach( (value) => {
-          if (value.positiveExamples && value.positiveExamples.length < 10) {
+          if (value.positiveExamples && value.positiveExamples.length < 1) {
             return false;
           }
           //各クラス名が設定されていないならNG
@@ -111,7 +112,7 @@ export class WatsonVisualRecognitionNewClassifierController {
 
         if (!this.isReadyToCreateClassifier()) {
             //送信前提を満たしていない場合はエラーとして終了
-            this.SharedService.addErrorMessage('Please set all input parameters (classifier name, positive examples and negative examples)');
+            this.SharedService.addErrorMessage(this.$translate.instant('message.text_010'));
 
             return;
         }
@@ -129,10 +130,10 @@ export class WatsonVisualRecognitionNewClassifierController {
             //正常応答の場合、応答データJSONオブジェクトをセット
             this.createdClassifier = resp.data;
 
-            //現在選択中のクラス分類器を更新
-            this.setCurrentTargetClassifier(this.createdClassifier);
+            //現在選択中のクラス分類器を更新(v3になって、非同期での学習となったため、この機能は削除)
+            //this.setCurrentTargetClassifier(this.createdClassifier);
 
-            this.SharedService.addInfoMessage('Set a current Classifier Id = ' + this.createdClassifier.classifier_id);
+            this.SharedService.addInfoMessage(this.$translate.instant('message.text_011'));
         }, (resp) => {
             //うまくresolve出来なかった場合。
             this.SharedService.addErrorMessage(resp.status + ':' + resp.data.error);
@@ -197,4 +198,4 @@ export class WatsonVisualRecognitionNewClassifierController {
 
 }
 
-WatsonVisualRecognitionNewClassifierController.$inject = ['$window', '$location', '$scope', '$log', 'uiGridConstants', 'Upload', 'GlobalConstants', 'SharedService', 'WatsonVisualRecognitionV3Service'];
+WatsonVisualRecognitionNewClassifierController.$inject = ['$window', '$location', '$scope', '$log', '$translate', 'uiGridConstants', 'Upload', 'GlobalConstants', 'SharedService', 'WatsonVisualRecognitionV3Service'];

@@ -32,16 +32,22 @@
       <div class="form-group">
         <div class="form-group">
           <label class="control-label" for="targetOwner"><span translate="label.text_007"></span></label>
-          <div id="targetOwner" class="btn-group">
+          <!--<div id="targetOwner" class="btn-group">
             <label class="btn btn-primary" ng-model="controller.enableOwnerIBM" uib-btn-checkbox><span translate="label.text_008"></span></label>
             <label class="btn btn-primary" ng-model="controller.enableOwnerMe" uib-btn-checkbox><span translate="label.text_009"></span></label>
+          </div>
+        -->
+          <div id="targetOwner" class="form-group">
+            <checkbox class="btn-primary" ng-model="controller.enableOwnerIBM"></checkbox><span translate="label.text_008"></span>
+            <checkbox class="btn-primary" ng-model="controller.enableOwnerMe"></checkbox><span translate="label.text_009"></span>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label" for="targetClassTypeButtonGroup"><span translate="label.text_010"></span></label>
-          <div id="targetClassTypeButtonGroup" class="btn-group">
-            <label class="btn btn-success" ng-model="controller.targetClassesType" uib-btn-radio="controller.GlobalConstants.TARGET_CLASS_TYPE_ALL"><span translate="label.text_011"></span></label>
-            <label class="btn btn-success" ng-model="controller.targetClassesType" uib-btn-radio="controller.GlobalConstants.TARGET_CLASS_TYPE_SPECIFIED"><span translate="label.text_012"></span></label>
+
+          <div id="targetClassTypeRadioGroup" class="form-group">
+            <input name="targetClassType" type="radio" ng-model="controller.targetClassesType" ng-value="controller.GlobalConstants.TARGET_CLASS_TYPE_ALL"><span translate="label.text_011"></span></input>
+            <input name="targetClassType" type="radio" ng-disabled="controller.getSelectedClassifiers() <= 0" ng-model="controller.targetClassesType" ng-value="controller.GlobalConstants.TARGET_CLASS_TYPE_SPECIFIED"><span translate="label.text_012"></span></input>
           </div>
         </div>
         <!-- -->
@@ -53,9 +59,9 @@
         <div class="form-group" ng-class="{'has-error': form.threshold.$dirty && form.threshold.$invalid}">
           <label class="control-label" for="threshold"><span translate="label.text_015"></span></label>
           <span class="help-inline text-danger" ng-messages="form.threshold.$error" ng-if="form.threshold.$dirty || form.$submitted">
-            <span ng-message="number">Not a number</span>
-            <span ng-message="min">less than zero</span>
-            <span ng-message="max">greater than 1.0</span>
+            <span ng-message="number"><span translate="validation_message.not_number"></span></span>
+            <span ng-message="min"><span translate="validation_message.less_than_zero"></span></span>
+            <span ng-message="max"><span translate="validation_message.greater_than_one"></span></span>
           </span>
           <input id="threshold" name="threshold" type="number" min="0" max="1.0" class="form-control" placeholder="threshold" ng-model="controller.threshold" />
         </div>

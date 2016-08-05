@@ -17,6 +17,7 @@ import alerts from 'angular-ui-bootstrap/src/alert';
 import fileUpload from 'ng-file-upload';
 import angularLoadingBar from 'angular-loading-bar';
 import angularNvd3 from 'angular-nvd3';
+import angularBootstrapCheckbox from 'angular-bootstrap-checkbox/angular-bootstrap-checkbox';
 
 // application components
 import controllers from './components/controllers';
@@ -72,6 +73,7 @@ const appModule = angular.module(
     'ui.grid.exporter',
     'ui.grid.selection',
     'ui.grid.grouping',
+    'ui.checkbox',
     buttons,
     alerts,
     accordion,

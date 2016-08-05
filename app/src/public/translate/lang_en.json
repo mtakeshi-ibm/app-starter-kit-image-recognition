@@ -49,18 +49,24 @@
         "text_104" : "Created Date",
         "text_105" : "Delete",
         "text_106" : "File name",
-        "text_107" : "Score (Confidence)"
+        "text_107" : "Score (Confidence)",
+        "text_108" : "Owner",
+        "text_109" : "Class Name"
     },
     "message" : {
       "required" : "値は必須です。",
       "server_success" : "サーバーAPIの呼び出しは正常に終了しました。",
-      "server_failure" : "サーバーAPIの呼び出しは失敗しました。"
+      "server_failure" : "サーバーAPIの呼び出しは失敗しました。",
+      "text_010" :  "Imcomplete parameters(Classifier name is required. Positive Images are required.",
+      "text_011" :  "submit to crate a Classifier.Please wait until the status is ready.",
+      "text_012" :  "Missing Classifer ID"
     },
     "validation_message": {
         "required": "Required",
         "invalid": "Invalid value",
         "invalid_pattern" : "Invalid pattern",
         "invalid_number": "Invalid number",
+        "not_number" : "Not number",
         "invalid_color_pattern": "Invalid color pattern",
         "invalid_mail_address": "Invalid mail address",
         "duplicate": "duplicated value.",
@@ -68,9 +74,11 @@
         "minlength1": "1 or more characters required",
         "minlength2": "2 or more characters required",
         "minlength3": "3 or more characters required",
+        "less_than_zero": "less than zero",
+        "greater_than_one": "greater than 1",
         "password_not_the_same": "Invalid password",
-        "password_empty": "パスワードが未入力です。",
-        "password_required": "パスワードは必須です。",
+        "password_empty": "Password is empty",
+        "password_required": "Password is required.",
         "name_empty": "name is empty "
     },
     "button": {
