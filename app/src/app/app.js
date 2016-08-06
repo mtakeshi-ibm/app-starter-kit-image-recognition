@@ -5,6 +5,7 @@ import 'jquery/dist/jquery.min';
 //angular and sub components
 import angular from 'angular';
 import angularAnimate from 'angular-animate';
+import angularSanitize from 'angular-sanitize';
 import angularUIRouter from 'angular-ui-router';
 import angularMessages from 'angular-messages';
 import angularTranslate from 'angular-translate';
@@ -18,6 +19,7 @@ import fileUpload from 'ng-file-upload';
 import angularLoadingBar from 'angular-loading-bar';
 import angularNvd3 from 'angular-nvd3';
 import angularBootstrapCheckbox from 'angular-bootstrap-checkbox/angular-bootstrap-checkbox';
+import ngToast from 'ng-toast/dist/ngToast';
 
 // application components
 import controllers from './components/controllers';
@@ -35,6 +37,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //import '../style/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 
+import 'ng-toast/dist/ngToast.min.css';
+
 // load ui-grid JS and CSS (ui-gridはindex.jsが提供されていないため、importだけではJSを読み込まない)
 //ui-grid.min.jsをimport=require相当の処理をして読みこみ、ui.gridモジュールを読み込んで、後続の実際にangluar.moduleの
 //で 依存コンポーネントとして 固定的な 'ui.grid' のモジュール名文字列を指定する
@@ -51,6 +55,8 @@ import 'nvd3/build/nv.d3.min.js'
 import 'nvd3/build/nv.d3.min.css'
 import 'angular-nvd3/dist/angular-nvd3.min.js';
 
+
+
 // このモジュール名  (エントリーページの ng-app属性の指定値"app"と同じ名前にする必要がある)
 const MODULE_NAME = 'app';
 
@@ -59,6 +65,7 @@ const appModule = angular.module(
   MODULE_NAME,
   [
     angularAnimate,
+    angularSanitize,
     angularUIRouter,
     angularUIBootstrap,
     angularMessages,
@@ -74,6 +81,7 @@ const appModule = angular.module(
     'ui.grid.selection',
     'ui.grid.grouping',
     'ui.checkbox',
+    'ngToast',
     buttons,
     alerts,
     accordion,

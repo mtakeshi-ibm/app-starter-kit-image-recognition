@@ -8,12 +8,13 @@ export class WatsonVisualRecognitionClassifierListController {
     /**
      * コンストラクタ
      */
-    constructor($window, $location, $scope, $log, $translate, uiGridConstants, GlobalConstants, SharedService, WatsonVisualRecognitionV3Service) {
+    constructor($window, $location, $scope, $log, $translate, ngToast, uiGridConstants, GlobalConstants, SharedService, WatsonVisualRecognitionV3Service) {
         'ngInject';
 
         this.$scope = $scope;
         this.$log = $log;
         this.$translate = $translate;
+        this.ngToast = ngToast;
         this.GlobalConstants = GlobalConstants;
 
         this.SharedService = SharedService;
@@ -58,16 +59,16 @@ export class WatsonVisualRecognitionClassifierListController {
             }, {
                 field: 'status',
                 displayName: this.$translate.instant('label.text_103'),
-                cellClass: function (grid, row) {
-                  if (row.entity.status === 'failed') {
-                    return 'text-danger';
-                  } else if (row.entity.status === 'training') {
-                    return 'text-info';
-                  } else if (row.entity.status === 'ready') {
-                    return 'text-primary';
-                  } else {
-                    return 'text-default';
-                  }
+                cellClass: function(grid, row) {
+                    if (row.entity.status === 'failed') {
+                        return 'text-danger';
+                    } else if (row.entity.status === 'training') {
+                        return 'text-info';
+                    } else if (row.entity.status === 'ready') {
+                        return 'text-primary';
+                    } else {
+                        return 'text-default';
+                    }
                 }
             }, {
                 field: 'created',
@@ -176,10 +177,19 @@ export class WatsonVisualRecognitionClassifierListController {
      */
     updateSelectedClassifiers(selectedRows) {
 
-        //選択行データの配列から、選択されたクラス分類器IDのの配列を生成してセットする。
+        //選択行データの配列から、選択されたクラス分類器IDの配列を生成してセットする。
         const newSelectedClassifiers = [];
         for (var i = 0, n = selectedRows.length; i < n; i++) {
-            newSelectedClassifiers.push(angular.copy(selectedRows[i]));
+            let selectedRow = selectedRows[i];
+            //状態がreadyの場合にのみ、選択状態のものに組み込む
+            if (selectedRow.status === 'ready') {
+                newSelectedClassifiers.push(angular.copy(selectedRows[i]));
+            } else {
+                this.ngToast.create({
+                    className: 'warning',
+                    content: this.$translate.instant('message.text_013')
+                });
+            }
         }
 
         //this.selectedClassifiers.length = 0; //clear array
@@ -269,4 +279,4 @@ export class WatsonVisualRecognitionClassifierListController {
     }
 }
 
-WatsonVisualRecognitionClassifierListController.$inject = ['$window', '$location', '$scope', '$log', '$translate', 'uiGridConstants', 'GlobalConstants', 'SharedService', 'WatsonVisualRecognitionV3Service'];
+WatsonVisualRecognitionClassifierListController.$inject = ['$window', '$location', '$scope', '$log', '$translate', 'ngToast', 'uiGridConstants', 'GlobalConstants', 'SharedService', 'WatsonVisualRecognitionV3Service'];
