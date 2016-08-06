@@ -109,6 +109,9 @@ const handlerFunc = (req, res) => {
                 preambleCRLF: true,
                 postambleCRLF: true,
                 url: WatsonVisualRecognitionUtil.createApiUrl('/v3/classify'),
+                headers : {
+                  'X-Watson-Learning-Opt-Out' : 'true'
+                },
                 // formDataというキー名はrequestモジュールのAPI仕様。
                 formData: {
                     //Watson API仕様で定められたキー名

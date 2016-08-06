@@ -100,9 +100,9 @@ const handlerFunc = (req, res) => {
                 postambleCRLF: true,
                 //url: config.watson.visual_recognition.baseUrl + '/v2/classifiers?version=2015-12-02',
                 url: WatsonVisualRecognitionUtil.createApiUrl('/v3/classifiers'),
-                // headers: {
-                //     "Authorization": auth
-                // },
+                headers : {
+                  'X-Watson-Learning-Opt-Out' : 'true'
+                },
                 formData: formData
             }, (error, response, body) => {
                 //処理時間計測

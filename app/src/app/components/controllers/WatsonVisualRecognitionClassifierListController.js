@@ -64,7 +64,7 @@ export class WatsonVisualRecognitionClassifierListController {
                         return 'text-danger';
                     } else if (row.entity.status === 'training') {
                         return 'text-info';
-                    } else if (row.entity.status === 'ready') {
+                    } else if (row.entity.status === 'ready' || row.entity.status === 'retraining') {
                         return 'text-primary';
                     } else {
                         return 'text-default';
@@ -181,8 +181,8 @@ export class WatsonVisualRecognitionClassifierListController {
         const newSelectedClassifiers = [];
         for (var i = 0, n = selectedRows.length; i < n; i++) {
             let selectedRow = selectedRows[i];
-            //状態がreadyの場合にのみ、選択状態のものに組み込む
-            if (selectedRow.status === 'ready') {
+            //状態がreadyまたはretrainingの場合にのみ、選択状態のものに組み込む
+            if (selectedRow.status === 'ready' || selectedRow.status === 'retraining' ) {
                 newSelectedClassifiers.push(angular.copy(selectedRows[i]));
             } else {
                 this.ngToast.create({

@@ -35,6 +35,8 @@
     "angular-i18n": "1.5.7",
     "angular-loading-bar": "0.9.0",
     "angular-messages": "1.5.7",
+    "d3" : "3.5.17",
+    "nvd3" : "1.8.4",
     "angular-nvd3": "1.0.8",
     "angular-sanitize": "1.5.7",
     "angular-spinner": "0.8.1",

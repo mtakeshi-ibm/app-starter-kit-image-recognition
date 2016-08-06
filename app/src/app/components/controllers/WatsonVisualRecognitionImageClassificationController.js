@@ -139,7 +139,7 @@ export class WatsonVisualRecognitionImageClassificationController {
 
         const objarray = [];
 
-        Array.forEach(classifiers, (item) => {
+        angular.forEach(classifiers, (item) => {
             if (item && item.classifier_id && item.name) {
                 const obj = {};
                 obj.classifier_id = item.classifier_id;
@@ -181,15 +181,15 @@ export class WatsonVisualRecognitionImageClassificationController {
         }
 
         //imagesフィールドの配列をループ(outerloop)
-        Array.forEach(data.images, (imageobj) => {
+        angular.forEach(data.images, (imageobj) => {
             //scoresフィールドの配列をループ(innerloop)
             if (imageobj.classifiers != null) {
                 //2nd-loop
-                Array.forEach(imageobj.classifiers, (classifier) => {
+                angular.forEach(imageobj.classifiers, (classifier) => {
 
                   if(classifier.classes != null) {
                     //3rd-loop
-                    Array.forEach(classifier.classes, (cls) => {
+                    angular.forEach(classifier.classes, (cls) => {
                       const d = {};
                       d.image = imageobj.image;
                       d.classifier_id = classifier.classifier_id;
