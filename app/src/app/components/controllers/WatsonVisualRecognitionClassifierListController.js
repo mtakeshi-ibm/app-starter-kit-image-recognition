@@ -54,8 +54,10 @@ export class WatsonVisualRecognitionClassifierListController {
                 field: 'classifier_id',
                 displayName: this.$translate.instant('label.text_101')
             }, {
-                field: 'classes',
-                displayName: this.$translate.instant('label.text_102')
+                //field: 'classes',
+                name : 'Classes',
+                displayName: this.$translate.instant('label.text_102'),
+                cellTemplate : `<div class="ui-grid-cell-contents" style="text-align:left;"><ul style="margin-left: 0;padding-left: 0;"><li ng-repeat="cls in row.entity.classes">{{cls.class}}</li></ul></div>"`
             }, {
                 field: 'status',
                 displayName: this.$translate.instant('label.text_103'),
@@ -213,8 +215,9 @@ export class WatsonVisualRecognitionClassifierListController {
         responsePromise.then((respdata) => {
             //this.$log.debug('レスポンスデータの数=' + respdata.data.classifiers.length);
             //応答オブジェクトの構造は、$httpサービスで決めされている。dataプロパティがレスポンスボディ。
-            //this.$scope.classifiers = respdata.data.classifiers;
-            this.$scope.gridOptions.data = this._modifyReceivedData(respdata.data.classifiers);
+            this.$scope.classifiers = respdata.data.classifiers;
+            //this.$scope.gridOptions.data = this._modifyReceivedData(respdata.data.classifiers);
+            this.$scope.gridOptions.data = respdata.data.classifiers;
             //データをキャッシュ
             this.cachedClassifiers = respdata.data.classifers;
 
