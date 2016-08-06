@@ -12,8 +12,7 @@
     "start-dev-supervisor": "supervisor -s -t -i node_modules,package.json,src/app,upload -e node,js,json ./index"
   },
   "engines": {
-    "node": ">=4.3.1",
-    "npm": ">=3.9.3"
+    "node": ">=4.3.1"
   },
   "repository": {
     "type": "git",
