@@ -19,7 +19,7 @@
             <span ng-message="pattern"><span translate="validation_message.invalid_pattern"></span></span>
             <span ng-message="minlength"><span translate="validation_message.minlength"></span></span>
             </span>
-            <input id="classifierName" name="classifierName" type="text" class="form-control" ng-model="controller.classifierName" ng-required="true" ng-pattern="/^[a-zA-Z0-9]+$/" ng-trim="true" placeholder="New Classifier Name"></input>
+            <input id="classifierName" name="classifierName" type="text" class="form-control" ng-model="controller.classifierName" ng-required="true" ng-pattern="/^[_a-zA-Z0-9]+$/" ng-trim="true" placeholder="New Classifier Name"></input>
         </div>
 
         <!-- 複数のClassの名前 -->

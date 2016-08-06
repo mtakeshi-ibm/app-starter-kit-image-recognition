@@ -1,3 +1,4 @@
+'use strict';
 /* eslint-disable no-console */
 const config = require('config');
 const RestClient = require('node-rest-client').Client;

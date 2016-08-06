@@ -20,6 +20,7 @@ import angularLoadingBar from 'angular-loading-bar';
 import angularNvd3 from 'angular-nvd3';
 import angularBootstrapCheckbox from 'angular-bootstrap-checkbox/angular-bootstrap-checkbox';
 import ngToast from 'ng-toast/dist/ngToast';
+import angularjsSlider from 'angularjs-slider/dist/rzslider.min';
 
 // application components
 import controllers from './components/controllers';
@@ -50,11 +51,14 @@ import 'angular-loading-bar/build/loading-bar.min.js';
 import 'angular-loading-bar/build/loading-bar.min.css';
 
 //import 'angular-google-chart/ng-google-chart.min.js';
+// load d3.js, nvd3, angular-nvd3 JS and CSS
 import 'd3/d3.min.js'
 import 'nvd3/build/nv.d3.min.js'
 import 'nvd3/build/nv.d3.min.css'
 import 'angular-nvd3/dist/angular-nvd3.min.js';
 
+// load angularjs-slider css
+import 'angularjs-slider/dist/rzslider.css';
 
 
 // このモジュール名  (エントリーページの ng-app属性の指定値"app"と同じ名前にする必要がある)
@@ -82,6 +86,7 @@ const appModule = angular.module(
     'ui.grid.grouping',
     'ui.checkbox',
     'ngToast',
+    'rzModule',
     buttons,
     alerts,
     accordion,

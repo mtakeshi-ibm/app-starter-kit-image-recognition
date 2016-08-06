@@ -55,9 +55,9 @@ export class WatsonVisualRecognitionClassifierListController {
                 displayName: this.$translate.instant('label.text_101')
             }, {
                 //field: 'classes',
-                name : 'Classes',
+                name: 'Classes',
                 displayName: this.$translate.instant('label.text_102'),
-                cellTemplate : `<div class="ui-grid-cell-contents" style="text-align:left;"><ul style="margin-left: 0;padding-left: 0;"><li ng-repeat="cls in row.entity.classes">{{cls.class}}</li></ul></div>"`
+                cellTemplate: `<div class="ui-grid-cell-contents" style="text-align:left;"><ul style="margin-left: 0;padding-left: 0;"><li ng-repeat="cls in row.entity.classes">{{cls.class}}</li></ul></div>"`
             }, {
                 field: 'status',
                 displayName: this.$translate.instant('label.text_103'),
@@ -141,24 +141,32 @@ export class WatsonVisualRecognitionClassifierListController {
             //メッセージクリア
             this.clearMessages();
 
-            this.$log.info("deleteClassifier=" + angular.toJson(classifier));
+            this.$log.debug("deleteClassifier=" + angular.toJson(classifier));
 
             // API呼び出し
             const responsePromise = this.WatsonVisualRecognitionV3Service.deleteClassifier(classifier);
 
             responsePromise.then((respdata) => {
+
+                //画面に成功メッセージを表示
+                this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
+
                 this.$log.info(angular.toJson(respdata.data));
-                this.SharedService.addInfoMessage('Classifier ' + classifier.name + '(Classifier ID=' + classifier.classifier_id + ') is deleted successfully.', null);
+                this.SharedService.addInfoMessage(this.$translate.instant('text_014', {
+                    classifier_id: classifier.classifier_id
+                }));
 
                 //現在のリストを更新
                 this.listClassifiers();
 
+            }, (respdata) => { //this.$log.debug(angular.toJson(respdata));
+                this.SharedService.addInfoMessage(this.$translate.instant('text_015', {
+                    classifier_id: classifier.classifier_id
+                }));
             }).catch((respdata) => {
-                //this.$log.debug(angular.toJson(respdata));
-                this.SharedService.addFatalMessage('Error. Failed to delete classifier : ' + classifier.name + '(Classifier ID=' + classifier.classifier_id + ')', null);
+                //do nothing.
             }).finally(() => {
                 //this.$log.debug("service called and finally.");
-
             });
 
         };
@@ -184,7 +192,7 @@ export class WatsonVisualRecognitionClassifierListController {
         for (var i = 0, n = selectedRows.length; i < n; i++) {
             let selectedRow = selectedRows[i];
             //状態がreadyまたはretrainingの場合にのみ、選択状態のものに組み込む
-            if (selectedRow.status === 'ready' || selectedRow.status === 'retraining' ) {
+            if (selectedRow.status === 'ready' || selectedRow.status === 'retraining') {
                 newSelectedClassifiers.push(angular.copy(selectedRows[i]));
             } else {
                 this.ngToast.create({
@@ -213,6 +221,9 @@ export class WatsonVisualRecognitionClassifierListController {
         const responsePromise = this.WatsonVisualRecognitionV3Service.listClassifiers();
 
         responsePromise.then((respdata) => {
+            //画面に成功メッセージを表示
+            this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
+
             //this.$log.debug('レスポンスデータの数=' + respdata.data.classifiers.length);
             //応答オブジェクトの構造は、$httpサービスで決めされている。dataプロパティがレスポンスボディ。
             this.$scope.classifiers = respdata.data.classifiers;
@@ -228,9 +239,23 @@ export class WatsonVisualRecognitionClassifierListController {
                 this.SharedService.addWarnMessage('No Classifiers.');
             }
 
-        }).catch((respdata) => {
-            //this.$log.debug(angular.toJson(respdata));
-            this.SharedService.addFatalMessage('Server Error!' + (respdata ? angular.toJson(respdata) : ""), null);
+        }).catch((resp) => {
+            //画面にエラーメッセージを表示
+            if (resp.data && resp.data.message) {
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status_and_message', {
+                    'status': resp.status,
+                    'message': resp.data.message
+                }));
+            } else if (resp.data && resp.data.error.description) {
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status_and_message', {
+                    'status': resp.status,
+                    'message': resp.data.error.description
+                }));
+            } else {
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status', {
+                    'status': resp.status
+                }));
+            }
         }).finally(() => {
             //this.$log.debug("service called and finally.");
         });

@@ -33,6 +33,19 @@ export class WatsonVisualRecognitionImageClassificationController {
         this.enableOwnerIBM = false;
         this.enableOwnerMe = true;
 
+        //angularjs-sliderオブジェクト(確信度閾値指定用)
+        this.$scope.sliderOptions = {
+            floor: 0,
+            ceil: 1,
+            minLimit: 0,
+            maxLimit: 1,
+            precision: 3,
+            step: 0.025,
+            enforceStep: false,
+            vertical: false,
+            showTicks: true
+        }
+
         //ui-grid表設定オブジェクト
         this.$scope.gridOptions = {
                 data: [],
@@ -57,7 +70,7 @@ export class WatsonVisualRecognitionImageClassificationController {
                     displayName: this.$translate.instant('label.text_109')
                 }, {
                     field: 'score',
-                    displayName:  this.$translate.instant('label.text_107'),
+                    displayName: this.$translate.instant('label.text_107'),
                     filters: [{
                         condition: this.uiGridConstants.filter.GREATER_THAN_OR_EQUAL,
                         placeholder: '>='
@@ -90,7 +103,8 @@ export class WatsonVisualRecognitionImageClassificationController {
      * ファイルをサーバーにアップロードして、クラス分類・判定を行う
      */
     upload() {
-        this.$log.info("upload method is called.")
+        //this.$log.debug("upload method is called.")
+        this.clearMessages();
 
         let targetClassifiers = {};
 
@@ -109,20 +123,41 @@ export class WatsonVisualRecognitionImageClassificationController {
                 'targetClassifiers': targetClassifiers,
                 'threshold': this.threshold,
                 'ownerIBM': this.enableOwnerIBM,
-                'ownerMe' : this.enableOwnerMe
+                'ownerMe': this.enableOwnerMe
             }
         }).then((resp) => {
+            //成功：resolve時処理
             this.$log.info('Success uploaded. Response: ' + angular.toJson(resp.data));
+
+            //画面に成功メッセージを表示
+            this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
+
             this.$scope.elapsedTime = resp.data.elapsedTime;
-            //画面表示用に、二次元表に適したデータ構造へ組み替え
+            //画面表示用に、二次元表に適したデータ構造へ組み替えしてセット
             this.$scope.gridOptions.data = this._flattenData(resp.data);
         }, (resp) => {
+            //失敗:reject時処理
             //エラー発生時(400 BAD Requestの場合など)
             this.$log.error('Error status: ' + resp.status);
+
+            //結果一覧画面をクリア
+            this.$scope.gridOptions.data = [];
+
+            //画面にエラーメッセージを表示
             if (resp.data && resp.data.message) {
-                this.SharedService.addErrorMessage('Error ' + resp.status + ' ' + resp.data.message);
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status_and_message', {
+                    'status': resp.status,
+                    'message': resp.data.message
+                }));
+            } else if (resp.data && resp.data.error.description) {
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status_and_message', {
+                    'status': resp.status,
+                    'message': resp.data.error.description
+                }));
             } else {
-                this.SharedService.addErrorMessage('Error ' + resp.status + ' Server Error!');
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status', {
+                    'status': resp.status
+                }));
             }
         }, (evt) => {
             //const progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -187,19 +222,19 @@ export class WatsonVisualRecognitionImageClassificationController {
                 //2nd-loop
                 angular.forEach(imageobj.classifiers, (classifier) => {
 
-                  if(classifier.classes != null) {
-                    //3rd-loop
-                    angular.forEach(classifier.classes, (cls) => {
-                      const d = {};
-                      d.image = imageobj.image;
-                      d.classifier_id = classifier.classifier_id;
-                      d.classifier_name = classifier.name;
-                      d.class_name = cls.class;
-                      d.score = cls.score;
-                      //結果データ配列にセット
-                      retArray.push(d);
-                    });
-                  }
+                    if (classifier.classes != null) {
+                        //3rd-loop
+                        angular.forEach(classifier.classes, (cls) => {
+                            const d = {};
+                            d.image = imageobj.image;
+                            d.classifier_id = classifier.classifier_id;
+                            d.classifier_name = classifier.name;
+                            d.class_name = cls.class;
+                            d.score = cls.score;
+                            //結果データ配列にセット
+                            retArray.push(d);
+                        });
+                    }
                 });
             } else {
                 const d = {};
@@ -217,4 +252,4 @@ export class WatsonVisualRecognitionImageClassificationController {
 
 }
 
-WatsonVisualRecognitionImageClassificationController.$inject = ['$window', '$location', '$scope', '$log','$translate', 'uiGridConstants', 'Upload', 'GlobalConstants', 'SharedService', 'WatsonVisualRecognitionV3Service'];
+WatsonVisualRecognitionImageClassificationController.$inject = ['$window', '$location', '$scope', '$log', '$translate', 'uiGridConstants', 'Upload', 'GlobalConstants', 'SharedService', 'WatsonVisualRecognitionV3Service'];

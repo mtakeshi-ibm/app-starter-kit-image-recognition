@@ -1,3 +1,4 @@
+'use strict';
 /*eslint no-console: "error"*/
 /**
  * このindex.jsは、json-api-serverモジュールの起動用であり、npm run startで実行される const apiServer = require('./json-api-server'); 生成、ポート番号

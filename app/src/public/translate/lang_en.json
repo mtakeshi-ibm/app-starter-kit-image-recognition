@@ -58,10 +58,13 @@
         "server_success": "Called Server API successfully.",
         "server_failure": "failed to call the Server API.",
         "server_failure_with_status": "failed to call the Server API.Response status = {{status}}",
+        "server_failure_with_status_and_message": "failed to call the Server API.Response status ={{status}} , message={{message}}",
         "text_010": "Imcomplete parameters(Classifier name is required. Positive Images are required.",
         "text_011": "submit to crate a Classifier.Please wait until the status is ready.",
         "text_012": "Missing Classifer ID",
-        "text_013": "Cannot select a classifier whose status is not-ready."
+        "text_013": "Cannot select a classifier whose status is not-ready.",
+        "text_014": "Deleted the classifier succesfully , Classifier (ID={{classifier_id}})",
+        "text_015": "failed to delete the classifier (ID={{classifier_id}})"
     },
     "validation_message": {
         "required": "Required",

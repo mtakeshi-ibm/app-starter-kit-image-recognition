@@ -13,7 +13,7 @@ const WatsonVisualRecognitionUtil = require('../utils/WatsonVisualRecognitionUti
 const keepUploadedImageFiles = config.app.global.keep_uploaded_image_files;
 
 if (config.app.global.request_debug) {
-  request.debug = true
+    request.debug = true
 }
 
 //const keepGeneratedTrainingZipFiles = config.app.global.keep_generated_training_zip_files;
@@ -21,20 +21,16 @@ if (config.app.global.request_debug) {
  * Routeハンドラー：GET /api/classifiers用
  */
 const handlerFunc = (req, res) => {
-    logger.app.debug("Called ClassifyImageHandlerFunction.");
 
-    //HTML側でのname属性と整合性を併せてミドルウェア設定しているため、ここでは req.files に情報が入っている
-    //console.log('req.files = ' + JSON.stringify(req.files));
+    logger.app.debug("Called ClassifyImageHandlerFunction.");
 
     //一時ファイルとして保存されたファイルを読み込み、Bufferデータにする(同期型)
     //const fileBuffer = fs.readFileSync(req.file.path);
 
-    //BASIC認証用のヘッダ (v2用)
-    //const auth = "Basic " + new Buffer(config.watson.visual_recognition.apiKey + ":" + config.watson.visual_recognition.apiPassword).toString("base64");
-
     //requestモジュールによるファイルアップロードでformDataキーにセットする送信データ(parameters)の入れ物
     const apiParams = {};
 
+    //thresholdパラメータの初期値を得る(0.5)
     let threshold = config.bluemix_service.watson_visualrecognition_v3.default_threshold;
 
     //targetClassifiersパラメータの組み立て
@@ -49,7 +45,7 @@ const handlerFunc = (req, res) => {
             logger.app.debug("parameter classifier_ids = " + JSON.stringify(classifierlist.classifiers));
             const classifier_ids_array = [];
             classifierlist.classifiers.forEach((value) => {
-              classifier_ids_array.push(value.classifier_id);
+                classifier_ids_array.push(value.classifier_id);
             });
             apiParams['classifier_ids'] = classifier_ids_array; //最後にapiParams自体をJSON.stringifyするのでここではオブジェクトとしてのArrayをセット
         }
@@ -57,14 +53,21 @@ const handlerFunc = (req, res) => {
 
     //thresholdパラメータの組み立て
     logger.app.debug("request parameter threshold = " + req.body.threshold);
-    if (req.body.threshold && parseFloat(req.body.threshold)) {
-        threshold = parseFloat(req.body.threshold);
+
+    if (typeof(req.body.threshold) !== 'undefined' && req.body.threshold !== null) {
+        //文字列からfloat値へ変換し、値がゼロ以上の場合はデフォルト値を上書き
+        const parsedThreshold = parseFloat(req.body.threshold);
+        if (parsedThreshold >= 0) {
+            threshold = parsedThreshold;
+        }
     }
+
+
     logger.app.debug("parameter threshold = " + threshold);
     apiParams['threshold'] = threshold;
 
     //ownersパラメータの組み立て
-    logger.app.debug("request parameter ownerIBM = " + req.body.ownerIBM + ", length =" + req.body.ownerIBM.length );
+    logger.app.debug("request parameter ownerIBM = " + req.body.ownerIBM + ", length =" + req.body.ownerIBM.length);
     logger.app.debug("request parameter ownerMe = " + req.body.ownerMe + ", length =" + req.body.ownerMe.length);
     let owners = [];
     if (req.body.ownerIBM == "true") {
@@ -76,17 +79,6 @@ const handlerFunc = (req, res) => {
     logger.app.debug("parameter owners = " + JSON.stringify(owners));
     apiParams['owners'] = owners; //最後にapiParams自体をJSON.stringifyするのでここではオブジェクトとしてのArrayをセット
 
-    // for (var i = 0, n = req.files.length; i < n; i++) {
-    //     var fileinfo = req.files[i];
-    //     //formDataキーの値として設定するオブジェクトとして、送信データ毎に送る
-    //     formData['file' + i] = {
-    //         value: fs.createReadStream(fileinfo.path),
-    //         options: {
-    //             filename: fileinfo.originalname,
-    //             contentType: fileinfo.mimetype
-    //         }
-    //     }
-    // }
 
     //アップロードされたファイル(複数対応のために、1つであってもZIP化する。)
     const uploadedFilesInfo = req.files; // multerで.arrayメソッドを使った場合は、このfilesオブジェクトはアップロードされたファイル情報を要素に持つ配列になっている
@@ -109,8 +101,8 @@ const handlerFunc = (req, res) => {
                 preambleCRLF: true,
                 postambleCRLF: true,
                 url: WatsonVisualRecognitionUtil.createApiUrl('/v3/classify'),
-                headers : {
-                  'X-Watson-Learning-Opt-Out' : 'true'
+                headers: {
+                    'X-Watson-Learning-Opt-Out': 'true'
                 },
                 // formDataというキー名はrequestモジュールのAPI仕様。
                 formData: {
@@ -128,15 +120,7 @@ const handlerFunc = (req, res) => {
                 }
             }, (error, response, body) => {
                 //処理時間計測
-                const hrend = process.hrtime(hrstart); //引数にhrstartを指定することで、そことの差分時間を返す
-
-                // if(body){
-                //   logger.app.debug('body=' + JSON.stringify(body));
-                // }
-
-                // if(response){
-                //   logger.app.debug('response=' + JSON.stringify(response));
-                // }
+                const hrend = process.hrtime(hrstart); //引数にhrstartを指定することで、差分時間を得る
 
                 if (error) {
                     logger.app.error("ERROR " + error.toString());
@@ -151,7 +135,7 @@ const handlerFunc = (req, res) => {
                         res.sendStatus(response.statusCode);
                     }
                 } else {
-                    logger.app.info('Upload successful!  Server responded with:', body);
+                    logger.app.debug('Uploaded successfully!  Server responded with = ', body);
                     //文字列テキストであるbodyを、再度JavaScriptオブジェクト化し、処理時間の配列を保持するプロパティを生やす。
                     var respdata = JSON.parse(body);
                     // logger.app.debug('elapsedTime = '+JSON.stringify(hrend));
@@ -169,7 +153,7 @@ const handlerFunc = (req, res) => {
                                 if (err) {
                                     throw err;
                                 }
-                                logger.app.debug('uploded file deleted = ' + fileinfo.path);
+                                logger.app.debug('successfully deleted an uploaded file = ' + fileinfo.path);
                             });
                         }
                     }
@@ -183,7 +167,7 @@ const handlerFunc = (req, res) => {
                         if (err) {
                             throw err;
                         }
-                        logger.app.debug('zip file deleted = ' + uploadedFileZipFilePath);
+                        logger.app.debug('successfully deleted a zip file = ' + uploadedFileZipFilePath);
                     });
                 }
             })
