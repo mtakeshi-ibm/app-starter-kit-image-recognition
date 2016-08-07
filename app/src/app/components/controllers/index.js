@@ -3,6 +3,7 @@ import angular from 'angular';
 //コントローラ：固定的設定
 import { ApplicationController } from './ApplicationController';
 import { MainController } from './MainController';
+import { BasicModalController } from './BasicModalController';
 
 //コントローラ：アプリケーション設定
 import { WatsonVisualRecognitionClassifierListController } from './WatsonVisualRecognitionClassifierListController';
@@ -17,6 +18,7 @@ const appcontrollerModule = angular.module(
 //コントローラのクラスを登録(システム内部用・必須)
 appcontrollerModule.controller('ApplicationController', ApplicationController);
 appcontrollerModule.controller('MainController', MainController);
+appcontrollerModule.controller('BasicModalController', BasicModalController);
 
 //コントローラのクラスを登録(アプリケーション用)
 appcontrollerModule.controller('WatsonVisualRecognitionClassifierListController', WatsonVisualRecognitionClassifierListController);

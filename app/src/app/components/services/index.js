@@ -1,6 +1,8 @@
 import angular from 'angular';
 
 import SharedService from './SharedService';
+import ModalService from './ModalService';
+
 import WatsonVisualRecognitionV3Service from './WatsonVisualRecognitionV3Service';
 
 const appServiceModule = angular.module(
@@ -9,6 +11,7 @@ const appServiceModule = angular.module(
 
 //以下、サービスを登録
 appServiceModule.service('SharedService', SharedService.activate);
+appServiceModule.service('ModalService', ModalService.activate);
 appServiceModule.service('WatsonVisualRecognitionV3Service', WatsonVisualRecognitionV3Service.activate);
 
 export default appServiceModule.name;

@@ -8,7 +8,7 @@ export class WatsonVisualRecognitionClassifierListController {
     /**
      * コンストラクタ
      */
-    constructor($window, $location, $scope, $log, $translate, ngToast, uiGridConstants, GlobalConstants, SharedService, WatsonVisualRecognitionV3Service) {
+    constructor($window, $location, $scope, $log, $translate, ngToast, uiGridConstants, GlobalConstants, SharedService, ModalService, WatsonVisualRecognitionV3Service) {
         'ngInject';
 
         this.$scope = $scope;
@@ -18,6 +18,8 @@ export class WatsonVisualRecognitionClassifierListController {
         this.GlobalConstants = GlobalConstants;
 
         this.SharedService = SharedService;
+        this.ModalService = ModalService;
+
         this.WatsonVisualRecognitionV3Service = WatsonVisualRecognitionV3Service;
         this.uiGridConstants = uiGridConstants;
 
@@ -61,7 +63,7 @@ export class WatsonVisualRecognitionClassifierListController {
             }, {
                 field: 'status',
                 displayName: this.$translate.instant('label.text_103'),
-                cellTemplate : `<div class="ui-grid-cell-contents" style="text-align:center;">
+                cellTemplate: `<div class="ui-grid-cell-contents" style="text-align:center;">
                 <span uib-tooltip="{{row.entity.explanation}}">{{row.entity.status}}</span>
                 </div>`,
                 cellClass: function(grid, row) {
@@ -162,9 +164,9 @@ export class WatsonVisualRecognitionClassifierListController {
                     }
                 }
             },
-            title : {
-              enable : true,
-              text : this.$translate.instant('label.text_028')
+            title: {
+                enable: true,
+                text: this.$translate.instant('label.text_028')
             }
         };
 
@@ -179,32 +181,55 @@ export class WatsonVisualRecognitionClassifierListController {
 
             this.$log.debug("deleteClassifier=" + angular.toJson(classifier));
 
-            // API呼び出し
-            const responsePromise = this.WatsonVisualRecognitionV3Service.deleteClassifier(classifier);
-
-            responsePromise.then((respdata) => {
-
-                //画面に成功メッセージを表示
-                this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
-
-                this.$log.info(angular.toJson(respdata.data));
-                this.SharedService.addInfoMessage(this.$translate.instant('text_014', {
-                    classifier_id: classifier.classifier_id
-                }));
-
-                //現在のリストを更新
-                this.listClassifiers();
-
-            }, (respdata) => { //this.$log.debug(angular.toJson(respdata));
-                this.SharedService.addInfoMessage(this.$translate.instant('text_015', {
-                    classifier_id: classifier.classifier_id
-                }));
-            }).catch((respdata) => {
-                //do nothing.
-            }).finally(() => {
-                //this.$log.debug("service called and finally.");
+            //ダイアログ表示
+            const modalInstance = this.ModalService.openModal({
+                //size: 'lg',
+            }, {
+                modalHeader: this.$translate.instant('dialog_title.confirmation'),
+                modalBody: this.$translate.instant("message.text_017", {
+                    "name": classifier.classifier_id
+                }),
+                okFunc: (param) => {
+                    //this.$log.debug("OKがモーダルウィンドウでクリックされたことを、呼び出し元コールバック関数で検知しました。");
+                },
+                cancelFunc: (param) => {
+                    //this.$log.debug("Cancelがモーダルウィンドウでクリックされたことを、呼び出し元コールバック関数で検知しました。");
+                }
             });
 
+            // ダイアログのOK・Cancelボタンの押下結果を基に動作
+            modalInstance.result.then(
+                (modalCallbackedParam) => {
+                    //確認ダイアログでCanelボタンがクリックされた場合
+                    // サービスの分類器削除API呼び出し
+                    const responsePromise = this.WatsonVisualRecognitionV3Service.deleteClassifier(classifier);
+
+                    responsePromise.then((respdata) => {
+
+                        //画面に成功メッセージを表示
+                        this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
+                        this.$log.debug(angular.toJson(respdata.data));
+                        this.SharedService.addInfoMessage(this.$translate.instant('text_014', {
+                            classifier_id: classifier.classifier_id
+                        }));
+
+                        //現在のリストを更新
+                        this.listClassifiers();
+
+                    }, (respdata) => { //this.$log.debug(angular.toJson(respdata));
+                        this.SharedService.addInfoMessage(this.$translate.instant('text_015', {
+                            classifier_id: classifier.classifier_id
+                        }));
+                    }).catch((respdata) => {
+                        //do nothing.
+                    }).finally(() => {
+                        //this.$log.debug("service called and finally.");
+                    });
+
+                }, (modalCallbackedParam) => {
+                    //確認ダイアログでCanelボタンがクリックされた場合
+                    //this.$log.debug("Modal's dismiss is called, modalCallbackedParam=" + angular.toJson(modalCallbackedParam));
+                });
         };
 
         //clean Messages
@@ -300,18 +325,18 @@ export class WatsonVisualRecognitionClassifierListController {
     /**
      * キャッシュ済み分類器のリストを更新します。
      */
-    _updateCachedClassifiers(cachedClassifiers)  {
-      //応答オブジェクトの構造は、$httpサービスで決めされている。dataプロパティがレスポンスボディ。
-      this.$scope.classifiers = cachedClassifiers;
+    _updateCachedClassifiers(cachedClassifiers) {
+        //応答オブジェクトの構造は、$httpサービスで決めされている。dataプロパティがレスポンスボディ。
+        this.$scope.classifiers = cachedClassifiers;
 
-      this.$scope.gridOptions.data = cachedClassifiers;
-      //データをキャッシュ
-      this.cachedClassifiers = cachedClassifiers;
+        this.$scope.gridOptions.data = cachedClassifiers;
+        //データをキャッシュ
+        this.cachedClassifiers = cachedClassifiers;
 
-      this.$scope.chartData = this._createChartData(cachedClassifiers);
+        this.$scope.chartData = this._createChartData(cachedClassifiers);
 
-      //アプリセッションにセット
-      this.SharedService.setApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS, cachedClassifiers);
+        //アプリセッションにセット
+        this.SharedService.setApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS, cachedClassifiers);
 
     }
 
@@ -320,15 +345,15 @@ export class WatsonVisualRecognitionClassifierListController {
      */
     _clearSelectedClassifier() {
 
-      if (this.selectedClassifiers && this.selectedClassifiers.length > 0) {
-        //Toastメッセージ表示
-        this.ngToast.create({
-            className: 'warning',
-            content: this.$translate.instant('message.text_016')
-        });
-      }
-      this.selectedClassifiers = [];
-      this.SharedService.setApplicationAttribute(this.GlobalConstants.SELECTED_CLASSIFIERS, []);
+        if (this.selectedClassifiers && this.selectedClassifiers.length > 0) {
+            //Toastメッセージ表示
+            this.ngToast.create({
+                className: 'warning',
+                content: this.$translate.instant('message.text_016')
+            });
+        }
+        this.selectedClassifiers = [];
+        this.SharedService.setApplicationAttribute(this.GlobalConstants.SELECTED_CLASSIFIERS, []);
     }
 
     /**
@@ -402,4 +427,4 @@ export class WatsonVisualRecognitionClassifierListController {
     }
 }
 
-WatsonVisualRecognitionClassifierListController.$inject = ['$window', '$location', '$scope', '$log', '$translate', 'ngToast', 'uiGridConstants', 'GlobalConstants', 'SharedService', 'WatsonVisualRecognitionV3Service'];
+WatsonVisualRecognitionClassifierListController.$inject = ['$window', '$location', '$scope', '$log', '$translate', 'ngToast', 'uiGridConstants', 'GlobalConstants', 'SharedService', 'ModalService', 'WatsonVisualRecognitionV3Service'];

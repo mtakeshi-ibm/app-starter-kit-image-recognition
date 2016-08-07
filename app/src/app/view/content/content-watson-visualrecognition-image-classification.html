@@ -32,11 +32,7 @@
         <div class="form-group">
             <div class="form-group">
                 <label class="control-label" for="targetOwner"><span translate="label.text_007"></span></label>
-                <!--<div id="targetOwner" class="btn-group">
-            <label class="btn btn-primary" ng-model="controller.enableOwnerIBM" uib-btn-checkbox><span translate="label.text_008"></span></label>
-            <label class="btn btn-primary" ng-model="controller.enableOwnerMe" uib-btn-checkbox><span translate="label.text_009"></span></label>
-          </div>
-        -->
+
                 <div id="targetOwner" class="form-group">
                     <checkbox class="btn-primary" ng-model="controller.enableOwnerMe"></checkbox><span translate="label.text_009"></span>
                     <checkbox class="btn-primary" ng-model="controller.enableOwnerIBM"></checkbox><span translate="label.text_008"></span>
@@ -53,7 +49,7 @@
             <!-- -->
             <div ng-show="controller.GlobalConstants.TARGET_CLASS_TYPE_SPECIFIED === controller.targetClassesType">
                 <label><span translate="label.text_014"></span></label>
-                <span ng-repeat="classifier in controller.getSelectedClassifiers()" class="label label-primary">{{ classifier.name }}</span>
+                <h4><span ng-repeat="classifier in controller.getSelectedClassifiers()" class="label label-success">{{ classifier.name }}</span></h4>
                 <div ng-if="controller.getSelectedClassifiers() <= 0"><span translate="label.text_017"></span></div>
             </div>
             <!--

@@ -69,7 +69,7 @@
         <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
         <table class="table">
             <tr>
-                <th ng-repeat="i in controller.negativeExamples"># {{$index + 1}}</th>
+                <th ng-repeat="i in controller.negativeExamples"># {{$index + 1}}:{{i.name}}</th>
             </tr>
             <tr>
                 <td ng-repeat="i in controller.negativeExamples">

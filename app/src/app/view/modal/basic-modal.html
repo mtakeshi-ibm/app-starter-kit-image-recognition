@@ -1,0 +1,12 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{::modalHeader}}</h3>
+</div>
+<div class="modal-body">
+  <p>{{modalBody}}</p>
+</div>
+<div class="modal-footer">
+  <!--このokはモーダル側Controller(BasicModalController)のokメソッドを呼び出す-->
+  <button class="btn btn-primary" ng-click="ok()">{{ ::('button.ok'|translate) }}</button>
+  <!--同様に、モーダル側Controllerのcancelメソッド -->
+  <button class="btn btn-default" ng-click="cancel()">{{ ::('button.cancel'|translate) }}</button>
+</div>
