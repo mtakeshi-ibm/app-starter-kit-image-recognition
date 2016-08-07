@@ -79,7 +79,7 @@
         </table>
         <div class="form-group form-group-sm">
             <!-- アップロード＆新規分類器作成ボタン -->
-            <button type="button" class="btn btn-primary" ng-disabled="form.$dirty && form.$invalid && !controller.isReadyToCreateClassifier()" ng-click="controller.createNewClassifier()"><span translate="label.text_024"></span></button>
+            <button type="button" class="btn btn-primary" ng-disabled="form.$invalid || !controller.isReadyToCreateClassifier()" ng-click="controller.createNewClassifier()"><span translate="label.text_024"></span></button>
         </div>
         <div class="form-group form-group-sm">
             <div class="row" ng-show="elapsedTime.length >= 2">
