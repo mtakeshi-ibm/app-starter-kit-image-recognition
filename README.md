@@ -37,12 +37,15 @@ if you get it, put the key into either two placement.
 
     and access to http://localhost:8080/
 
+## Links
+  * Website [IBM Watson VisualRecognition](https://www.ibm.com/watson/developercloud/visual-recognition.html)
+
 ## Contribution
 
 
 ## Licence
 
-[MIT](https://github.com/mtakeshi-ibm/app-starter-kit-image-recognition/blob/master/LICENSE)
+Licensed under [MIT](https://github.com/mtakeshi-ibm/app-starter-kit-image-recognition/blob/master/LICENSE)
 
 ## Author
 
