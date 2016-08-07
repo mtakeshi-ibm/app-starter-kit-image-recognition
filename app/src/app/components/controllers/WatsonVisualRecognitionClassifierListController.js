@@ -144,6 +144,10 @@ export class WatsonVisualRecognitionClassifierListController {
         this.$scope.chartOptions = {
             chart: {
                 type: 'pieChart',
+                labelType :'percent',
+                donut : true,
+                donutRatio : 0.35,
+                donutLabelsOutside : false,
                 height: 400,
                 x: function(d) {
                     return d.key;
@@ -167,7 +171,15 @@ export class WatsonVisualRecognitionClassifierListController {
             title: {
                 enable: true,
                 text: this.$translate.instant('label.text_028')
-            }
+            },
+            // subtitle : {
+            //   enable : true,
+            //   html : 'subtitle',
+            //   css : {
+            //     'text-align' : 'center',
+            //     'margin' : '10px 13px 0px 7px'
+            //   }
+            // }
         };
 
         //チャート表示データ

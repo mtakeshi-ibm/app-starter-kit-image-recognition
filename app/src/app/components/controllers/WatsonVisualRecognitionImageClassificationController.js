@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Controller:
+ * コントローラー: 画像分類画面
  */
 export class WatsonVisualRecognitionImageClassificationController {
 
@@ -67,9 +67,9 @@ export class WatsonVisualRecognitionImageClassificationController {
                     displayName: this.$translate.instant('label.text_100')
                 }, {
                     //field: 'class_name',
-                    name : 'class_name',
+                    name: 'class_name',
                     displayName: this.$translate.instant('label.text_109'),
-                    cellTemplate : `<div class="ui-grid-cell-contents">
+                    cellTemplate: `<div class="ui-grid-cell-contents">
                     <span uib-tooltip="{{row.entity.type_hierarchy}}">{{row.entity.class_name}}</span>
                     </div>`
                 }, {
@@ -79,11 +79,11 @@ export class WatsonVisualRecognitionImageClassificationController {
                         var val = row.entity.score;
                         if (val < 0.5) {
                             return 'text-danger';
-                        } else if (0.5 <= val &&  val < 0.7) {
+                        } else if (0.5 <= val && val < 0.7) {
                             return 'text-default';
-                        } else if (0.7 <= val &&  val < 0.7) {
+                        } else if (0.7 <= val && val < 0.7) {
                             return 'text-primar';
-                        } else if (0.7 <= val &&  val < 0.9) {
+                        } else if (0.7 <= val && val < 0.9) {
                             return 'text-info';
                         } else if (0.9 <= val) {
                             return 'text-success';
@@ -132,6 +132,7 @@ export class WatsonVisualRecognitionImageClassificationController {
         if (this.targetClassesType !== this.GlobalConstants.TARGET_CLASS_TYPE_ALL) {
             targetClassifiers = angular.toJson(this.modifyClassifiers(this.getSelectedClassifiers())) //配列オブジェクト
         }
+
 
         //ng-file-upload を利用してアップロードを行う
         this.Upload.upload({
@@ -260,9 +261,20 @@ export class WatsonVisualRecognitionImageClassificationController {
             } else {
                 const d = {};
                 d.image = imageobj.image;
-                d.classifier_id = 'n/a';
-                d.name = 'n/a';
-                d.score = '(under threthold)';
+                if (imageobj.error) {
+                    //エラーの場合は、分類器ID列に、「エラー」との文字を表示
+                    d.classifier_id = imageobj.error.error_id;
+                    //エラーの場合は、分類器名列に、エラー
+                    d.classifier_name = imageobj.error.description;
+                    d.class_name = '';
+                    d.score = '';
+                } else {
+                    d.classifier_id = 'n/a';
+                    d.classifier_name = 'n/a';
+                    d.class_name = '';
+                    d.score = '';
+                }
+
                 retArray.push(d);
             }
         });

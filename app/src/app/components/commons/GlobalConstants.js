@@ -18,14 +18,8 @@ class GlobalConstants {
 
         this.TARGET_CLASS_TYPE_SPECIFIED = "SPECIFIED";
 
-
-        this.SAMPLE_PREDICTIVE_DATA_STRUCTURE_INCOME_LEVELS = ["Low", "Medium", "High"];
-        this.SAMPLE_PREDICTIVE_DATA_STRUCTURE_NUM_OF_CREDIT_CARDS_LEVELS = ["Less than 5", "5 or more"];
-        this.SAMPLE_PREDICTIVE_DATA_STRUCTURE_EDUCATION_LEVELS = ["College", "High school"];
-        this.SAMPLE_PREDICTIVE_DATA_STRUCTURE_CAR_LOANS_LEVELS = ["None or 1", "More than 2"];
-
-        this.SAMPLE_PREDICTIVE_CREDIT_RATING_RESULT_KEY_NAME = "$R-Credit rating";
-        this.SAMPLE_PREDICTIVE_CREDIT_RATING_RESULT_CONFIDENCE_KEY_NAME = "$RC-Credit rating";
+        //画像分類APIにおける、1つの画像ファイルサイズの制限(※単位はBytes.なお、これは分類器生成時の制限ではないことに注意)
+        this.IMAGE_CLASSIFICATION_SIZE_LIMIT_PER_FILE = 2097152;
 
     }
 

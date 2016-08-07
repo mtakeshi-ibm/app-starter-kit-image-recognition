@@ -18,12 +18,13 @@
             <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
             <table class="table">
                 <tr>
-                    <th ng-repeat="i in controller.targetFile"># {{$index + 1}} : {{i.name}}</th>
+                    <th ng-repeat="i in controller.targetFile"># {{$index + 1}} : {{i.name}} ({{i.size|BytesFilter}})</th>
                 </tr>
                 <tr>
                     <td ng-repeat="i in controller.targetFile">
                         <!-- <img ngf-thumbnail="controller.targetFile[i]" /> -->
-                        <img ngf-thumbnail="i" />
+                        <!-- <img ngf-thumbnail="i" /> -->
+                        <img ngf-src="i" ngf-resize="{width: 200, height: 200}"/>
                     </td>
                 </tr>
             </table>
@@ -63,6 +64,7 @@
                 <input id="threshold" name="threshold" type="number" min="0" max="1.0" class="form-control" placeholder="threshold" ng-model="controller.threshold" />
             </div>
           -->
+            <!-- 閾値用 angularjs-slide によるスライダーUIコンポーネント -->
             <div class="form-group">
                 <label class="control-label" for="threshold"><span translate="label.text_015"></span></label>
                 <rzslider name="threshold" rz-slider-model="controller.threshold" rz-slider-options="sliderOptions">></rzslider>
