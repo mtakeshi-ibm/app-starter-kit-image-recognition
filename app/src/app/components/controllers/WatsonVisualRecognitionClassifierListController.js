@@ -61,6 +61,9 @@ export class WatsonVisualRecognitionClassifierListController {
             }, {
                 field: 'status',
                 displayName: this.$translate.instant('label.text_103'),
+                cellTemplate : `<div class="ui-grid-cell-contents" style="text-align:center;">
+                <span uib-tooltip="{{row.entity.explanation}}">{{row.entity.status}}</span>
+                </div>`,
                 cellClass: function(grid, row) {
                     if (row.entity.status === 'failed') {
                         return 'text-danger';
@@ -134,6 +137,39 @@ export class WatsonVisualRecognitionClassifierListController {
             paginationPageSize: 100,
             paginationPageSizes: [100, 200, 300, 500, 1000]
         };
+
+        //チャート構造オプション
+        this.$scope.chartOptions = {
+            chart: {
+                type: 'pieChart',
+                height: 400,
+                x: function(d) {
+                    return d.key;
+                },
+                y: function(d) {
+                    return d.y;
+                },
+                showLabels: true,
+                duration: 500,
+                labelThreshold: 0.01,
+                labelSunbeamLayout: true,
+                legend: {
+                    margin: {
+                        top: 5,
+                        right: 35,
+                        bottom: 5,
+                        left: 0
+                    }
+                }
+            },
+            title : {
+              enable : true,
+              text : this.$translate.instant('label.text_028')
+            }
+        };
+
+        //チャート表示データ
+        this.$scope.chartData = this._createChartData(this.cachedClassifiers);
 
         //削除関数
         $scope.deleteClassifier = (classifier) => {
@@ -225,15 +261,10 @@ export class WatsonVisualRecognitionClassifierListController {
             this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
 
             //this.$log.debug('レスポンスデータの数=' + respdata.data.classifiers.length);
-            //応答オブジェクトの構造は、$httpサービスで決めされている。dataプロパティがレスポンスボディ。
-            this.$scope.classifiers = respdata.data.classifiers;
-            //this.$scope.gridOptions.data = this._modifyReceivedData(respdata.data.classifiers);
-            this.$scope.gridOptions.data = respdata.data.classifiers;
-            //データをキャッシュ
-            this.cachedClassifiers = respdata.data.classifers;
 
-            //アプリセッションにセット(_modifyReceivedDataで処理したあとのデータをセットする)
-            this.SharedService.setApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS, this.$scope.gridOptions.data);
+            //チャートデータを更新
+            this._updateCachedClassifiers(respdata.data.classifiers);
+
             //
             if (respdata.data !== null && (WatsonVisualRecognitionClassifierListController.isType('Array', respdata.data.classifiers) && respdata.data.classifiers.length === 0)) {
                 this.SharedService.addWarnMessage('No Classifiers.');
@@ -260,6 +291,86 @@ export class WatsonVisualRecognitionClassifierListController {
             //this.$log.debug("service called and finally.");
         });
 
+    }
+
+    /**
+     *
+     */
+    _updateCachedClassifiers(cachedClassifiers)  {
+      //応答オブジェクトの構造は、$httpサービスで決めされている。dataプロパティがレスポンスボディ。
+      this.$scope.classifiers = cachedClassifiers;
+      //this.$scope.gridOptions.data = this._modifyReceivedData(respdata.data.classifiers);
+      this.$scope.gridOptions.data = cachedClassifiers;
+      //データをキャッシュ
+      this.cachedClassifiers = cachedClassifiers;
+
+      this.$scope.chartData = this._createChartData(cachedClassifiers);
+
+      //アプリセッションにセット(_modifyReceivedDataで処理したあとのデータをセットする)
+      this.SharedService.setApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS, cachedClassifiers);
+
+    }
+
+    /**
+     * パイチャートデータを生成
+     */
+    _createChartData(cachedClassifiers) {
+        if (!cachedClassifiers || cachedClassifiers.length === 0) {
+            return [];
+        }
+
+        const array = [];
+        let numOfReady = 0;
+        let numOfFailed = 0;
+        let numOfTraining = 0;
+        let numOfRetraining = 0;
+
+        //status別に数を計測して
+        cachedClassifiers.forEach((value) => {
+            const status = value.status;
+            switch (status) {
+                case 'ready':
+                    ++numOfReady;
+                    break;
+                case 'training':
+                    ++numOfTraining;
+                    break;
+                case 'retraining':
+                    ++numOfRetraining;
+                    break;
+                case 'failed':
+                    ++numOfFailed;
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        //ready件数パイチャートデータセット
+        array.push({
+            key: 'ready',
+            y: numOfReady
+        });
+
+        //training件数パイチャートデータセット
+        array.push({
+            key: 'training',
+            y: numOfTraining
+        });
+
+        //retraining件数パイチャートデータセット
+        array.push({
+            key: 'retraining',
+            y: numOfRetraining
+        });
+
+        //failed件数パイチャートデータセット
+        array.push({
+            key: 'failed',
+            y: numOfFailed
+        });
+
+        return array;
     }
 
     /**

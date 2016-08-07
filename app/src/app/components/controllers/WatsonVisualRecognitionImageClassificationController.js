@@ -71,6 +71,22 @@ export class WatsonVisualRecognitionImageClassificationController {
                 }, {
                     field: 'score',
                     displayName: this.$translate.instant('label.text_107'),
+                    cellClass: function(grid, row) {
+                        var val = row.entity.score;
+                        if (val < 0.5) {
+                            return 'text-danger';
+                        } else if (0.5 <= val &&  val < 0.7) {
+                            return 'text-default';
+                        } else if (0.7 <= val &&  val < 0.7) {
+                            return 'text-primar';
+                        } else if (0.7 <= val &&  val < 0.9) {
+                            return 'text-info';
+                        } else if (0.9 <= val) {
+                            return 'text-success';
+                        } else {
+                            return 'text-default';
+                        }
+                    },
                     filters: [{
                         condition: this.uiGridConstants.filter.GREATER_THAN_OR_EQUAL,
                         placeholder: '>='
