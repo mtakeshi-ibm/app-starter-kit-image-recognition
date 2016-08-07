@@ -2,8 +2,12 @@
     "title": {
         "test": "テストメッセージ",
         "app": "App StarterKit for Image Recognition",
+        "app_intro_001": "画像認識サービスを利用した提案、デモ、PoC、デリバリー活動を支援するスターターキット",
+        "app_intro_002": "利用内容をトップメニューまたはサイドメニューから選択してください。",
         "top": "Top",
         "menu_01": "IBM Watson VRによる画像認識",
+        "menu_01_intro_001" : "IBM Watson VisualRecognition API(v3)を利用した画像認識サービス",
+        "menu_01_intro_002" : "このスターターキットの利用は、IBM Watson VisualRecognitionのサービスを利用する APIキーを取得してください。",
         "menu_01_01": "作成済み画像分類器一覧",
         "menu_01_02": "画像分類器の新規作成",
         "menu_01_03": "画像分類器を利用した画像分類",

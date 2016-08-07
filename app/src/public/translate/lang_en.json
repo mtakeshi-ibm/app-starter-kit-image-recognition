@@ -2,8 +2,12 @@
     "title": {
         "test": "Test Message",
         "app": "App StarterKit for Image Recognition",
+        "app_intro_001": "a Starter-Kit for proposals, demos, Proof-of-Concept projects using image recognition services.",
+        "app_intro_002": "Select an item on top menu bar or side menu panel.",
         "top": "Top",
         "menu_01": "Image Recognition by IBM Watson VR",
+        "menu_01_intro_001" : "Image Recognition by IBM Watson VisualRecognition API(v3)",
+        "menu_01_intro_002" : "(*) You must have an API key for access to the IBM Watson VisualRecognition Service (V3, GA Edition)",
         "menu_01_01": "List created classifiers",
         "menu_01_02": "Create a new classifier",
         "menu_01_03": "Classify images",
