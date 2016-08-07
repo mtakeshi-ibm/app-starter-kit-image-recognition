@@ -66,8 +66,12 @@ export class WatsonVisualRecognitionImageClassificationController {
                     field: 'classifier_name',
                     displayName: this.$translate.instant('label.text_100')
                 }, {
-                    field: 'class_name',
-                    displayName: this.$translate.instant('label.text_109')
+                    //field: 'class_name',
+                    name : 'class_name',
+                    displayName: this.$translate.instant('label.text_109'),
+                    cellTemplate : `<div class="ui-grid-cell-contents">
+                    <span uib-tooltip="{{row.entity.type_hierarchy}}">{{row.entity.class_name}}</span>
+                    </div>`
                 }, {
                     field: 'score',
                     displayName: this.$translate.instant('label.text_107'),
@@ -247,6 +251,7 @@ export class WatsonVisualRecognitionImageClassificationController {
                             d.classifier_name = classifier.name;
                             d.class_name = cls.class;
                             d.score = cls.score;
+                            d.type_hierarchy = cls.type_hierarchy;
                             //結果データ配列にセット
                             retArray.push(d);
                         });

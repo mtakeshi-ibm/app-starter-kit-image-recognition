@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Controller:
+ * コントローラ：分類器一覧表示画面
  */
 export class WatsonVisualRecognitionClassifierListController {
 
@@ -248,8 +248,12 @@ export class WatsonVisualRecognitionClassifierListController {
      * List All Classifiers
      */
     listClassifiers() {
+
         //メッセージクリア
         this.clearMessages();
+
+        //「選択済みの分類器」の設定をクリア
+        this._clearSelectedClassifier();
 
         //this.SharedService.addFatalMessage('Hello, Fatal!', null);
 
@@ -294,25 +298,41 @@ export class WatsonVisualRecognitionClassifierListController {
     }
 
     /**
-     *
+     * キャッシュ済み分類器のリストを更新します。
      */
     _updateCachedClassifiers(cachedClassifiers)  {
       //応答オブジェクトの構造は、$httpサービスで決めされている。dataプロパティがレスポンスボディ。
       this.$scope.classifiers = cachedClassifiers;
-      //this.$scope.gridOptions.data = this._modifyReceivedData(respdata.data.classifiers);
+
       this.$scope.gridOptions.data = cachedClassifiers;
       //データをキャッシュ
       this.cachedClassifiers = cachedClassifiers;
 
       this.$scope.chartData = this._createChartData(cachedClassifiers);
 
-      //アプリセッションにセット(_modifyReceivedDataで処理したあとのデータをセットする)
+      //アプリセッションにセット
       this.SharedService.setApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS, cachedClassifiers);
 
     }
 
     /**
-     * パイチャートデータを生成
+     * 現在の「選択済みの分類器」をクリアします。
+     */
+    _clearSelectedClassifier() {
+
+      if (this.selectedClassifiers && this.selectedClassifiers.length > 0) {
+        //Toastメッセージ表示
+        this.ngToast.create({
+            className: 'warning',
+            content: this.$translate.instant('message.text_016')
+        });
+      }
+      this.selectedClassifiers = [];
+      this.SharedService.setApplicationAttribute(this.GlobalConstants.SELECTED_CLASSIFIERS, []);
+    }
+
+    /**
+     * パイチャートデータを生成します。
      */
     _createChartData(cachedClassifiers) {
         if (!cachedClassifiers || cachedClassifiers.length === 0) {
@@ -374,43 +394,7 @@ export class WatsonVisualRecognitionClassifierListController {
     }
 
     /**
-     * 受信データを、ui-gridでの表示に合うように組み替え
-     */
-    _modifyReceivedData(classifiers) {
-
-        const records = [];
-
-
-        classifiers.forEach((classifier) => {
-
-            const record = {};
-            record.classifier_id = classifier.classifier_id;
-            record.name = classifier.name;
-            record.owner = classifier.owner;
-            record.status = classifier.status;
-            record.created = classifier.created;
-
-            let classes = "";
-            //inner loop
-            classifier.classes.forEach((cls) => {
-                classes += cls.class + ", ";
-            });
-
-            //最後の部分の", ""を除去
-            if (classes.length >= 2) {
-                classes = classes.slice(0, classes.length - 2);
-            }
-            record.classes = classes;
-
-            records.push(record);
-        });
-
-        return records;
-
-    }
-
-    /**
-     *
+     * 第2引数が、第1引数の指定文字列のタイプかどうかを判定するユーティリティメソッド
      */
     static isType(type, obj) {
         const clas = Object.prototype.toString.call(obj).slice(8, -1);

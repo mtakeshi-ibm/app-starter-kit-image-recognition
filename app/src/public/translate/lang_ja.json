@@ -67,7 +67,8 @@
         "text_012": "分類器IDが指定されていません",
         "text_013": "ready状態でない分類器は選択できません",
         "text_014": "分類器 (ID={{classifier_id}}) を正常に削除しました。",
-        "text_015": "分類器 (ID={{classifier_id}}) の削除に失敗しました。"
+        "text_015": "分類器 (ID={{classifier_id}}) の削除に失敗しました。",
+        "text_016": "選択済みの分類器はクリアされました。"
     },
     "validation_message": {
         "required": "必須",

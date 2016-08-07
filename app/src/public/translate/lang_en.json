@@ -67,7 +67,8 @@
         "text_012": "Missing Classifer ID",
         "text_013": "Cannot select a classifier whose status is not-ready.",
         "text_014": "Deleted the classifier succesfully , Classifier (ID={{classifier_id}})",
-        "text_015": "failed to delete the classifier (ID={{classifier_id}})"
+        "text_015": "failed to delete the classifier (ID={{classifier_id}})",
+        "text_016": "Your selected classifiers are cleared."
     },
     "validation_message": {
         "required": "Required",
