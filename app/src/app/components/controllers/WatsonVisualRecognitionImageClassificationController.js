@@ -48,66 +48,100 @@ export class WatsonVisualRecognitionImageClassificationController {
 
         //ui-grid表設定オブジェクト
         this.$scope.gridOptions = {
-                data: [],
-                columnDefs: [{
-                    field: 'image',
-                    displayName: this.$translate.instant('label.text_106'),
-                    grouping: {
-                        groupPriority: 0
-                    },
-                    sort: {
-                        priority: 0,
-                        direction: 'desc'
-                    }
-                }, {
-                    field: 'classifier_id',
-                    displayName: this.$translate.instant('label.text_101')
-                }, {
-                    field: 'classifier_name',
-                    displayName: this.$translate.instant('label.text_100')
-                }, {
-                    //field: 'class_name',
-                    name: 'class_name',
-                    displayName: this.$translate.instant('label.text_109'),
-                    cellTemplate: `<div class="ui-grid-cell-contents">
+            data: [],
+            columnDefs: [{
+                field: 'image',
+                displayName: this.$translate.instant('label.text_106'),
+                grouping: {
+                    groupPriority: 0
+                },
+                sort: {
+                    priority: 0,
+                    direction: 'desc'
+                }
+            }, {
+                field: 'classifier_id',
+                displayName: this.$translate.instant('label.text_101')
+            }, {
+                field: 'classifier_name',
+                displayName: this.$translate.instant('label.text_100')
+            }, {
+                //field: 'class_name',
+                name: 'class_name',
+                displayName: this.$translate.instant('label.text_109'),
+                cellTemplate: `<div class="ui-grid-cell-contents">
                     <span uib-tooltip="{{row.entity.type_hierarchy}}">{{row.entity.class_name}}</span>
                     </div>`
+            }, {
+                field: 'score',
+                displayName: this.$translate.instant('label.text_107'),
+                cellClass: function(grid, row) {
+                    var val = row.entity.score;
+                    if (val < 0.5) {
+                        return 'text-danger';
+                    } else if (0.5 <= val && val < 0.7) {
+                        return 'text-default';
+                    } else if (0.7 <= val && val < 0.7) {
+                        return 'text-primar';
+                    } else if (0.7 <= val && val < 0.9) {
+                        return 'text-info';
+                    } else if (0.9 <= val) {
+                        return 'text-success';
+                    } else {
+                        return 'text-default';
+                    }
+                },
+                filters: [{
+                    condition: this.uiGridConstants.filter.GREATER_THAN_OR_EQUAL,
+                    placeholder: '>='
                 }, {
-                    field: 'score',
-                    displayName: this.$translate.instant('label.text_107'),
-                    cellClass: function(grid, row) {
-                        var val = row.entity.score;
-                        if (val < 0.5) {
-                            return 'text-danger';
-                        } else if (0.5 <= val && val < 0.7) {
-                            return 'text-default';
-                        } else if (0.7 <= val && val < 0.7) {
-                            return 'text-primar';
-                        } else if (0.7 <= val && val < 0.9) {
-                            return 'text-info';
-                        } else if (0.9 <= val) {
-                            return 'text-success';
-                        } else {
-                            return 'text-default';
-                        }
-                    },
-                    filters: [{
-                        condition: this.uiGridConstants.filter.GREATER_THAN_OR_EQUAL,
-                        placeholder: '>='
-                    }, {
-                        condition: this.uiGridConstants.filter.LESS_THAN_OR_EQUAL,
-                        placeholder: '<='
-                    }]
-                }],
-                showGridFooter: true,
-                enableGridMenu: true,
-                exporterCsvFilename: 'classificationResult.txt',
-                exporterCsvColumnSeparator: '\t',
-                exporterMenuPdf: false,
-                enableColumnResizing: true,
-                enableFiltering: true
+                    condition: this.uiGridConstants.filter.LESS_THAN_OR_EQUAL,
+                    placeholder: '<='
+                }]
+            }],
+            showGridFooter: true,
+            enableGridMenu: true,
+            exporterCsvFilename: 'classificationResult.txt',
+            exporterCsvColumnSeparator: '\t',
+            exporterMenuPdf: false,
+            enableColumnResizing: true,
+            enableFiltering: true
+        };
+
+
+
+        //チャート設定
+        $scope.chartOptions = {
+            chart: {
+                type: 'multiBarHorizontalChart',
+                height: 600,
+                x: function(d) {
+                    return d.label;
+                },
+                y: function(d) {
+                    return d.value;
+                },
+                //yErr: function(d){ return [-Math.abs(d.value * Math.random() * 0.3), Math.abs(d.value * Math.random() * 0.3)] },
+                showControls: true,
+                showValues: true,
+                duration: 500,
+                xAxis: {
+                    showMaxMin: true
+                },
+                yAxis: {
+                    axisLabel: 'Values',
+                    tickFormat: function(d) {
+                        return d3.format(',.2f')(d);
+                    }
+                },
+                valueFormat: this._valueFormatFunc()
             }
-            //clean Messages
+        };
+
+
+        $scope.chartData = [];
+
+        //clean Messages
         this.SharedService.clearMessages();
 
     }
@@ -154,8 +188,12 @@ export class WatsonVisualRecognitionImageClassificationController {
             this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
 
             this.$scope.elapsedTime = resp.data.elapsedTime;
-            //画面表示用に、二次元表に適したデータ構造へ組み替えしてセット
+            //画面二次元表(テーブル)表示用に、二次元表に適したデータ構造へ組み替えしてセット
             this.$scope.gridOptions.data = this._flattenData(resp.data);
+
+            //画面グラフ(棒グラフ)表示用に、オブジェクトデータ構造を生成してセット
+            this.$scope.chartData = this._generateChartData(resp.data);
+
         }, (resp) => {
             //失敗:reject時処理
             //エラー発生時(400 BAD Requestの場合など)
@@ -282,6 +320,82 @@ export class WatsonVisualRecognitionImageClassificationController {
         //this.$log.debug('flattenedData : ' + angular.toJson(retArray));
         return retArray;
     }
+
+    /**
+     * チャートデータ(配列)を生成して返します。NVD3の type: 'multiBarHorizontalChart' のチャート仕様に基づく、
+     * dataオブジェクト(配列)を返します。$scope.chartOptionsと整合性を持ったデータを返す必要があります。
+     */
+    _generateChartData(data) {
+
+        const retArray = [];
+
+        if (!data.images) {
+            return retArray;
+        }
+
+        //1.まず、系列(Series)オブジェクトを作る
+        // key に、シリーズ名文字列。値は、シリーズオブジェクトの文字列
+        const container = {};
+        // シリーズ名として、クラス名を用いる必要がある。
+        //imagesフィールドの配列をループ(outerloop)
+
+
+        //imagesフィールドの配列をループ(outerloop)
+        angular.forEach(data.images, (imageobj) => {
+            //scoresフィールドの配列をループ(innerloop)
+            if (imageobj.classifiers != null) {
+
+                //2nd-loop
+                angular.forEach(imageobj.classifiers, (classifier) => {
+
+                    if (classifier.classes != null) {
+                        //3rd-loop
+                        angular.forEach(classifier.classes, (cls) => {
+                            //クラス名が得られる。
+                            const clsname = cls.class;
+
+                            if (clsname) {
+
+                                if (!container[clsname]) {
+                                    //まだcontainerに系列名となるそのクラス名をキーとしたオブジェクトがセットされていないなら、まず箱を作る
+                                    //まだcontainerにこのクラス名がなければそのクラス名をキーに、値として空のオブジェクトをセット
+                                    const tmp = {
+                                        'key': clsname, //シリーズ名をセット
+                                        'values': [] // 初期配列をセット
+                                    };
+                                    container[clsname] = tmp;
+                                }
+
+                                //既にコンテナにクラス名のキーがある場合
+                                container[clsname].values.push({
+                                    "label": imageobj.image, //ファイル名
+                                    "value": cls.score
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        //containersオブジェクトの中身をループして、最終的なchartDataの値としてセット
+        Object.keys(container).forEach((key) => {
+            retArray.push(container[key]);
+        });
+
+        return retArray;
+    }
+
+    /**
+     *
+     */
+    _valueFormatFunc() {
+        //const format = d3.format(',.8f');
+        return (d) => {
+            //return format(d);
+            return d + '';
+        };
+    };
 
 }
 

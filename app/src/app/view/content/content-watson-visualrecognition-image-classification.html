@@ -85,4 +85,8 @@
 
     </form>
 
+    <div class="row" ng-if="chartData.length > 0">
+      <nvd3 options='chartOptions' data='chartData'></nvd3>
+    </div>
+
 </div>
