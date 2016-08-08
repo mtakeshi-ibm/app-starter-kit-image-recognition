@@ -114,7 +114,7 @@ export class WatsonVisualRecognitionImageClassificationController {
         $scope.chartOptions = {
             chart: {
                 type: 'multiBarHorizontalChart',
-                height: 600,
+                height: 300,
                 x: function(d) {
                     return d.label;
                 },
@@ -122,18 +122,19 @@ export class WatsonVisualRecognitionImageClassificationController {
                     return d.value;
                 },
                 //yErr: function(d){ return [-Math.abs(d.value * Math.random() * 0.3), Math.abs(d.value * Math.random() * 0.3)] },
-                showControls: true,
+                showControls: false,
                 showValues: true,
                 duration: 500,
                 xAxis: {
                     showMaxMin: true
                 },
                 yAxis: {
-                    axisLabel: 'Values',
+                    axisLabel: 'Score (Confidence)',
                     tickFormat: function(d) {
                         return d3.format(',.2f')(d);
                     }
                 },
+                yDomain : [0, 1.0],
                 valueFormat: this._valueFormatFunc()
             }
         };
@@ -382,6 +383,9 @@ export class WatsonVisualRecognitionImageClassificationController {
         Object.keys(container).forEach((key) => {
             retArray.push(container[key]);
         });
+
+        //高さの調整
+        this.$scope.chartOptions.chart.height = retArray.length * 80;
 
         return retArray;
     }
