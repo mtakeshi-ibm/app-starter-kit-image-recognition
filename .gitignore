@@ -4,8 +4,6 @@ launchConfigurations/
 # node environment file
 app/.env
 
-# distributions
-app/dist/
 
 # temporary uploaded files
 app/upload/
