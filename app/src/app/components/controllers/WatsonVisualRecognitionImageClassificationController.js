@@ -134,7 +134,7 @@ export class WatsonVisualRecognitionImageClassificationController {
                         return d3.format(',.2f')(d);
                     }
                 },
-                yDomain : [0, 1.0],
+                yDomain: [0, 1.0],
                 valueFormat: this._valueFormatFunc()
             }
         };
@@ -182,18 +182,30 @@ export class WatsonVisualRecognitionImageClassificationController {
                 'ownerMe': this.enableOwnerMe
             }
         }).then((resp) => {
-            //成功：resolve時処理
-            this.$log.info('Success uploaded. Response: ' + angular.toJson(resp.data));
 
-            //画面に成功メッセージを表示
-            this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
+            if (resp.data.status === 'ERROR') {
+                //エラー
+                this.$log.error('failed to uploaded. Response: ' + angular.toJson(resp.data));
 
-            this.$scope.elapsedTime = resp.data.elapsedTime;
-            //画面二次元表(テーブル)表示用に、二次元表に適したデータ構造へ組み替えしてセット
-            this.$scope.gridOptions.data = this._flattenData(resp.data);
+                //画面に失敗メッセージを表示
+                this.SharedService.addErrorMessage($translate.instant('message.server_failure_with_status_and_message', {
+                    status: resp.data.status,
+                    message: resp.data.statusInfo
+                }));
+            } else {
+                //成功：resolve時処理
+                this.$log.info('Success uploaded. Response: ' + angular.toJson(resp.data));
 
-            //画面グラフ(棒グラフ)表示用に、オブジェクトデータ構造を生成してセット
-            this.$scope.chartData = this._generateChartData(resp.data);
+                //画面に成功メッセージを表示
+                this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
+
+                this.$scope.elapsedTime = resp.data.elapsedTime;
+                //画面二次元表(テーブル)表示用に、二次元表に適したデータ構造へ組み替えしてセット
+                this.$scope.gridOptions.data = this._flattenData(resp.data);
+
+                //画面グラフ(棒グラフ)表示用に、オブジェクトデータ構造を生成してセット
+                this.$scope.chartData = this._generateChartData(resp.data);
+            }
 
         }, (resp) => {
             //失敗:reject時処理

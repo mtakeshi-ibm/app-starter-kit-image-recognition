@@ -41,12 +41,14 @@ export class WatsonVisualRecognitionNewClassifierController {
         //Object = {
         // className : string,
         // examples : Array<Buffer>
+        // fileType : string
         //}
         this.positiveExamplesArray = [];
         this.addClassDef();
 
         //ネガティブイメージデータ(ファイルインプットから選択されるバイナリ)
         this.negativeExamples = [];
+        this.negativeExamples_fileType = this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE;
 
         //新規作成されたクラス分類器
         this.createdClassifier = null;
@@ -79,9 +81,21 @@ export class WatsonVisualRecognitionNewClassifierController {
             return false;
         }
 
+        if (this.negativeExamples_fileType === this.GlobalConstants.UPLOAD_FILETYPE_ZIP && this.negativeExamples.length > 0) {
+          //ZIP型のアップロードが選択されている場合、ZIPファイル内の状況は不明なので、OKとするしかない
+          return true;
+        }
+
+
+
         // negativeExamplesのイメージ数が0でも、各クラスのPostiveイメージの合計が20以上なら問題無い
         //positiveExamplesの各イメージ数が10に満たない場合はNG
         this.positiveExamplesArray.forEach((value) => {
+
+            if (value.positiveExamples.fileType === this.GlobalConstants.UPLOAD_FILETYPE_ZIP && value.positiveExamples.length > 0) {
+              return true;
+            }
+
             if (value.positiveExamples && value.positiveExamples.length < 10) {
                 return false;
             }
@@ -93,7 +107,7 @@ export class WatsonVisualRecognitionNewClassifierController {
 
         //positiveExamplesで、クラス数が1つの場合は、ネガティブ画像が10個必要
         if (this.positiveExamplesArray.length === 1 && this.negativeExamples.length < 10) {
-          return false;
+            return false;
         }
 
         return true;
@@ -171,6 +185,7 @@ export class WatsonVisualRecognitionNewClassifierController {
         const positiveExampleDef = {};
         positiveExampleDef.className = "";
         positiveExampleDef.positiveExamples = [];
+        positiveExampleDef.fileType = this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE;
         this.positiveExamplesArray.push(positiveExampleDef);
     }
 
@@ -181,6 +196,33 @@ export class WatsonVisualRecognitionNewClassifierController {
         if (this.positiveExamplesArray.length >= 1) {
             this.positiveExamplesArray.pop();
         }
+    }
+
+    /**
+     * テンプレートHTMLのng-changeディレクティブでバインドされる関数
+     */
+    changePositiveUploadFileType(index, fileType) {
+
+        if (this.GlobalConstants.UPLOAD_FILETYPE_ZIP === fileType) {
+
+            const positiveExample = this.positiveExamplesArray[index];
+            positiveExample.fileType = this.GlobalConstants.UPLOAD_FILETYPE_ZIP;
+            positiveExample.positiveExamples = [];
+
+        } else if (this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE === fileType) {
+
+            const positiveExample = this.positiveExamplesArray[index];
+            positiveExample.fileType = this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE;
+            positiveExample.positiveExamples = [];
+
+        }
+    }
+
+    /**
+     *テンプレートHTMLのng-changeディレクティブでバインドされる関数
+     */
+    changeNegativeUploadFileType(fileType) {
+        this.negativeExamples = [];
     }
 
     /**

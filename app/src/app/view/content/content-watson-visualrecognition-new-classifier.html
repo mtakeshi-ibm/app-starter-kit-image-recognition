@@ -35,15 +35,26 @@
                     <input id="classifierName_{{$index}}" name="className" type="text" class="form-control" ng-model="positiveExample.className" ng-required="true" ng-pattern="/^[a-zA-Z0-9]+$/" ng-trim="true" placeholder="New Class Name"></input>
                 </div>
             </ng-form>
+
+            <!-- ポジティブ画像のアップロードファイルが単体画像ファイル群かを選択するラジオボタン相当の設定、-->
             <div class="form-group form-group-sm">
-                <label class="control-label" for="positiveExamples"><span translate="label.text_020"></span></label>
-                <input id="positiveExample_{{$index}}" type="file" class="form-control" ngf-select ng-model="positiveExample.positiveExamples" ngf-multiple="true" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="50MB" />
+                <input type="radio" name="positiveExample_fileType_{{$index}}" ng-change="controller.changePositiveUploadFileType($index, controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE)" ng-model="positiveExample.fileType" ng-value="controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE"
+                /><span translate="label.text_031"></span>
+                <input type="radio" name="positiveExample_fileType_{{$index}}" ng-change="controller.changePositiveUploadFileType($index, controller.GlobalConstants.UPLOAD_FILETYPE_ZIP)" ng-model="positiveExample.fileType" ng-value="controller.GlobalConstants.UPLOAD_FILETYPE_ZIP"
+                /><span translate="label.text_030"></span>
             </div>
-            <div ngf-drop ng-model="positiveExample.positiveExamples" class="drop-box"><span translate="label.text_005"></span></div>
-            <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
-            <table class="table">
+
+            <!-- 個別ファイル選択時のポジティブ画像アップロード要素 -->
+            <div ng-if="positiveExample.fileType === controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE" class="form-group form-group-sm ">
+                <label class="control-label" for="positiveExamples"><span translate="label.text_020"></span></label>
+                <input id="positiveExample_{{$index}}" type="file" class="form-control" ngf-select ng-model="positiveExample.positiveExamples" ngf-multiple="true" ngf-pattern="'.png,.jpg,.jpeg'" ngf-accept="'.png,.jpg,.jpeg'" ngf-max-size="100MB" />
+            </div>
+            <div ng-if="positiveExample.fileType === controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE" ngf-drop ng-model="positiveExample.positiveExamples" class="drop-box"><span translate="label.text_005"></span></div>
+            <!-- NG記述：意図せずngf-min-height="100 "のようにすると画像選択しても捨てられる <input type="file " ngf-select ng-model="controller.targetFile " ngf-multiple="false " ngf-pattern=" 'image/*' " ngf-accept=" 'image/*' " ngf-max-size="20MB " ngf-min-height="100
+                " ngf-resize="{width: 100, height: 100} " /> -->
+            <table ng-if="positiveExample.fileType === controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE" class="table">
                 <tr>
-                    <th ng-repeat="i in positiveExample.positiveExamples"># {{$index + 1}}:{{i.name}} ({{i.size|BytesFilter}})</th>
+                    <th ng-repeat="i in positiveExample.positiveExamples">#{{$index + 1}}:{{i.name}} ({{i.size|BytesFilter}})</th>
                 </tr>
                 <tr>
                     <td ng-repeat="i in positiveExample.positiveExamples">
@@ -52,22 +63,40 @@
                 </tr>
             </table>
 
+            <!-- ZIP選択時のポジティブ画像ファイルアップロード要素 -->
+            <div ng-if="positiveExample.fileType === controller.GlobalConstants.UPLOAD_FILETYPE_ZIP" class="form-group form-group-sm">
+                <label class="control-label" for="positiveExamples"><span translate="label.text_032"></span></label>
+                <input id="positiveExample_{{$index}}" type="file" class="form-control" ngf-select ng-model="positiveExample.positiveExamples" ngf-multiple="false" ngf-pattern="'.zip'" ngf-accept="'.zip'" />
+                <span ng-if="positiveExample.positiveExamples">{{ positiveExample.positiveExamples.size | BytesFilter }}</span>
+            </div>
         </div>
 
         <div class="form-group form-group-sm">
-            <!-- アップロード＆新規分類器作成ボタン -->
-            <button type="button" class="btn btn-primary" ng-click="controller.addClassDef()"><span translate="label.text_022"></span></button>
-            <button type="button" class="btn btn-danger" ng-disabled="controller.positiveExamplesArray.length <= 1" ng-click="controller.removeLastClassDef()"><span translate="label.text_023"></span></button>
+            <!-- クラス追加/最後のクラスを削除ボタン -->
+            <button type="button" class="btn btn-primary" ng-click="controller.addClassDef() "><span translate="label.text_022 "></span></button>
+            <button type="button" class="btn btn-danger" ng-disabled="controller.positiveExamplesArray.length <=1 " ng-click="controller.removeLastClassDef()"><span translate="label.text_023 "></span></button>
         </div>
 
-        <p/>
+        <!-- 区切り用水平線 -->
+        <hr/>
+
+        <!-- ネガティブ画像のアップロードファイルが、単体ファイルかZIPアーカイブかを選択するラジオボタン -->
         <div class="form-group form-group-sm">
+            <input type="radio" name="negativeExample_fileType" ng-change="controller.changeNegativeUploadFileType(controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE)" ng-model="controller.negativeExamples_fileType" ng-value="controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE"
+            /><span translate="label.text_031"></span>
+            <input type="radio" name="negativeExample_fileType" ng-change="controller.changeNegativeUploadFileType(controller.GlobalConstants.UPLOAD_FILETYPE_ZIP)" ng-model="controller.negativeExamples_fileType" ng-value="controller.GlobalConstants.UPLOAD_FILETYPE_ZIP"
+            /><span translate="label.text_030"></span>
+        </div>
+
+        <!-- 個別ファイル選択時のネガティブ画像アップロード要素 -->
+        <div ng-if="controller.negativeExamples_fileType === controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE " class="form-group form-group-sm">
             <label class="control-label" for="negativeExamples"><span translate="label.text_021"></span></label>
-            <input id="negativeExamples" type="file" class="form-control" ngf-select ng-model="controller.negativeExamples" ngf-multiple="true" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="50MB" />
+            <input id="negativeExamples" type="file" class="form-control" ngf-select ng-model="controller.negativeExamples" ngf-multiple="true" ngf-pattern="'.png,.jpg,jpeg'" ngf-accept="'.png,.jpg,.jpeg'" ngf-max-size="50MB" />
         </div>
-        <div ngf-drop ng-model="controller.negativeExamples" class="drop-box"><span translate="label.text_005"></span></div>
-        <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
-        <table class="table">
+        <div ng-if="controller.negativeExamples_fileType === controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE" ngf-drop ng-model="controller.negativeExamples" class="drop-box"><span translate="label.text_005"></span></div>
+        <!-- NGだったもの。意図せずngf-min-height="100 "のようにすると画像選択しても捨てられる <input type="file " ngf-select ng-model="controller.targetFile " ngf-multiple="false " ngf-pattern=" 'image/*' " ngf-accept=" 'image/*' " ngf-max-size="20MB " ngf-min-height="100
+            " ngf-resize="{width: 100, height: 100} " /> -->
+        <table ng-if="controller.negativeExamples_fileType === controller.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE" class="table">
             <tr>
                 <th ng-repeat="i in controller.negativeExamples"># {{$index + 1}}:{{i.name}} ({{i.size|BytesFilter}})</th>
             </tr>
@@ -77,12 +106,20 @@
                 </td>
             </tr>
         </table>
+
+        <!-- ZIPファイル選択時のネガティブ画像アップロード要素 -->
+        <div ng-if="controller.negativeExamples_fileType === controller.GlobalConstants.UPLOAD_FILETYPE_ZIP" class="form-group form-group-sm">
+            <label class="control-label" for="negativeExamples"><span translate="label.text_033"></span></label>
+            <input id="negativeExamples" type="file" class="form-control" ngf-select ng-model="controller.negativeExamples" ngf-multiple="false" ngf-pattern="'.zip'" ngf-accept="'.zip'" />
+            <span ng-if="controller.negativeExamples">{{ controller.negativeExamples.size | BytesFilter }}</span>
+        </div>
+
         <div class="form-group form-group-sm">
             <!-- アップロード＆新規分類器作成ボタン -->
             <button type="button" class="btn btn-primary" ng-disabled="form.$invalid || !controller.isReadyToCreateClassifier()" ng-click="controller.createNewClassifier()"><span translate="label.text_024"></span></button>
         </div>
         <div class="form-group form-group-sm">
-            <div class="row" ng-show="elapsedTime.length >= 2">
+            <div class="row" ng-show="elapsedTime.length>= 2">
                 <!-- サーバ側Node.jsからみた、WatsonVR API応答時間結果が正しくセットされていれば表示 -->
                 <span class="label label-default"><span translate="label.text_025"></span>{{ elapsedTime[0] + '.'+ elapsedTime[1]/1000000 }}</span>
             </div>

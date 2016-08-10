@@ -1,5 +1,5 @@
 /**
- * グローバル定数をインスタンスフィールドとして持つクラス
+ * Class for Global Constants (whi)
  */
 class GlobalConstants {
 
@@ -7,7 +7,7 @@ class GlobalConstants {
      * コンストラクタ
      */
     constructor() {
-        //
+
         //キャッシュされたクラス分類器の配列オブジェクトが格納されているキー文字列
         this.CASHED_CLASSIFIERS = "_CACHED_CLASSIFIERS_";
 
@@ -20,6 +20,10 @@ class GlobalConstants {
 
         //画像分類APIにおける、1つの画像ファイルサイズの制限(※単位はBytes.なお、これは分類器生成時の制限ではないことに注意)
         this.IMAGE_CLASSIFICATION_SIZE_LIMIT_PER_FILE = 2097152;
+
+        //ラジオボタンで利用する値文字列
+        this.UPLOAD_FILETYPE_ZIP = "ZIP";
+        this.UPLOAD_FILETYPE_SEPARATED_FILE = "SEPARATED_FILE";
 
     }
 

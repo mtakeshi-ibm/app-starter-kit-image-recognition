@@ -52,6 +52,10 @@
         "text_027": "Name f created Classifier",
         "text_028": "State of Classifiers",
         "text_029": "Error",
+        "text_030": "a ZIP Archive",
+        "text_031": "Files",
+        "text_032": "Positive Images(as a ZIP archive)",
+        "text_033": "Negative Images(as a ZIP archive)",
 
         "text_100": "Classifier Name",
         "text_101": "Classifier ID",

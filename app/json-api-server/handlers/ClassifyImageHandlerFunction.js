@@ -102,7 +102,7 @@ const handlerFunc = (req, res) => {
                 postambleCRLF: true,
                 url: WatsonVisualRecognitionUtil.createApiUrl('/v3/classify'),
                 headers: {
-                    'X-Watson-Learning-Opt-Out': 'true'
+                    'X-Watson-Learning-Opt-Out': config.bluemix_service.watson_visualrecognition_v3.opt_out
                 },
                 // formDataというキー名はrequestモジュールのAPI仕様。
                 formData: {

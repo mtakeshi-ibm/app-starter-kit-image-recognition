@@ -15,6 +15,19 @@ const appEnv = cfenv.getAppEnv();
  */
 Utils.createZip = (fileInfoArray, arr) => {
 
+    //渡されたファイルが、圧縮するまでもなくZIPファイルの場合は、圧縮せずに、
+    //multerが保存したZIPファイルのパスそのものを返す
+    // fileInfoArray.forEach( (fileInfo, idx) => {
+    //   logger.app.debug('Utils#createZip:'+ idx + ' = ' + JSON.stringify(fileInfo));
+    // });
+
+    if (fileInfoArray.length === 1 && fileInfoArray[0].originalname.toLowerCase().endsWith('.zip') ) {
+      //logger.app.debug('Utils#createZipでZIPファイルを検知：'+fileInfoArray[0].path);
+      // staticメソッドでThenable化して返す
+      arr.push(fileInfoArray[0].path);
+      return Promise.resolve(arr);
+    }
+
     // ランダムに生成する文字列の長さ
     const l = 8;
 

@@ -40,7 +40,8 @@
             "baseUrl": "https://gateway-a.watsonplatform.net/visual-recognition/api",
             "apiKey": null,
             "version" : "2016-05-17",
-            "default_threshold" : 0.5
+            "default_threshold" : 0.5,
+            "opt_out" : true
         }
     }
 }
