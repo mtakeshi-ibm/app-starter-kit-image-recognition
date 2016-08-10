@@ -1,5 +1,5 @@
 /**
- * グローバル定数をインスタンスフィールドとして持つクラス
+ * Class for Global Constants (whi)
  */
 class GlobalConstants {
 
@@ -7,7 +7,7 @@ class GlobalConstants {
      * コンストラクタ
      */
     constructor() {
-        //
+
         //キャッシュされたクラス分類器の配列オブジェクトが格納されているキー文字列
         this.CASHED_CLASSIFIERS = "_CACHED_CLASSIFIERS_";
 
@@ -24,9 +24,6 @@ class GlobalConstants {
         //ラジオボタンで利用する値文字列
         this.UPLOAD_FILETYPE_ZIP = "ZIP";
         this.UPLOAD_FILETYPE_SEPARATED_FILE = "SEPARATED_FILE";
-
-        this.POSITIVE = true;
-        this.NEGATIVE = false;
 
     }
 

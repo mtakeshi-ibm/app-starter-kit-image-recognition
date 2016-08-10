@@ -81,9 +81,21 @@ export class WatsonVisualRecognitionNewClassifierController {
             return false;
         }
 
+        if (this.negativeExamples_fileType === this.GlobalConstants.UPLOAD_FILETYPE_ZIP && this.negativeExamples.length > 0) {
+          //ZIP型のアップロードが選択されている場合、ZIPファイル内の状況は不明なので、OKとするしかない
+          return true;
+        }
+
+
+
         // negativeExamplesのイメージ数が0でも、各クラスのPostiveイメージの合計が20以上なら問題無い
         //positiveExamplesの各イメージ数が10に満たない場合はNG
         this.positiveExamplesArray.forEach((value) => {
+
+            if (value.positiveExamples.fileType === this.GlobalConstants.UPLOAD_FILETYPE_ZIP && value.positiveExamples.length > 0) {
+              return true;
+            }
+
             if (value.positiveExamples && value.positiveExamples.length < 10) {
                 return false;
             }

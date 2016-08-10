@@ -29,9 +29,9 @@ export class WatsonVisualRecognitionClassifierListController {
 
         //アプリセッション領域から、キャッシュ情報を取得(前にセットしている用)
         this.cachedClassifiers = SharedService.getApplicationAttribute(this.GlobalConstants.CASHED_CLASSIFIERS);
-        if (!this.cachedClassifiers || this.cachedClassifiers.length === 0) {
-            //空の配列をセット
-            this.cachedClassifiers = [];
+        if (!this.cachedClassifiers) {
+          //アプリセッション領域の値が未セット(空の配列すらない)場合は、APIを呼び出す
+          this.listClassifiers();
         }
 
         //アプリセッション領域から、現在選択状態のクラス分類ID(配列)をセット
@@ -147,7 +147,7 @@ export class WatsonVisualRecognitionClassifierListController {
                 labelType: 'percent',
                 donut: true,
                 donutRatio: 0.35,
-                donutLabelsOutside: false,
+                labelsOutside: false,
                 height: 400,
                 x: function(d) {
                     return d.key;
@@ -220,18 +220,24 @@ export class WatsonVisualRecognitionClassifierListController {
 
                         //画面に成功メッセージを表示
                         this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
-                        this.$log.debug(angular.toJson(respdata.data));
-                        this.SharedService.addInfoMessage(this.$translate.instant('text_014', {
-                            classifier_id: classifier.classifier_id
-                        }));
+                        //this.$log.debug(angular.toJson(respdata.data));
+                        this.ngToast.create({
+                            className: 'info',
+                            content: this.$translate.instant('message.text_014', {
+                                classifier_id: classifier.classifier_id
+                            })
+                        });
 
                         //現在のリストを更新
                         this.listClassifiers();
 
                     }, (respdata) => { //this.$log.debug(angular.toJson(respdata));
-                        this.SharedService.addInfoMessage(this.$translate.instant('text_015', {
-                            classifier_id: classifier.classifier_id
-                        }));
+                        this.ngToast.create({
+                            className: 'error',
+                            content: this.$translate.instant('message.text_015', {
+                                classifier_id: classifier.classifier_id
+                            })
+                        });
                     }).catch((respdata) => {
                         //do nothing.
                     }).finally(() => {
