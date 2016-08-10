@@ -57,7 +57,6 @@ const handlerFunc = (req, res) => {
 
     Promise.all(promiseArray).then((array) => {
 
-        logger.app.debug('after createAllZip, then!');
         logger.app.debug('after createAllZip result array = ' + JSON.stringify(array));
 
 
@@ -128,7 +127,7 @@ const handlerFunc = (req, res) => {
                         res.status(response.statusCode).send("Server Error : " + response.body);
                     }
                 } else {
-                    logger.app.info('Upload success! Server response:', body);
+                    logger.app.debug('Upload success! Server response:', body);
                     //文字列テキストであるbodyを、再度JavaScriptオブジェクト化し、処理時間の配列を保持するプロパティを生やす。
                     var respdata = JSON.parse(body);
                     //console.log('elapsedTime = ' + JSON.stringify(hrend));

@@ -41,12 +41,14 @@ export class WatsonVisualRecognitionNewClassifierController {
         //Object = {
         // className : string,
         // examples : Array<Buffer>
+        // fileType : string
         //}
         this.positiveExamplesArray = [];
         this.addClassDef();
 
         //ネガティブイメージデータ(ファイルインプットから選択されるバイナリ)
         this.negativeExamples = [];
+        this.negativeExamples_fileType = this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE;
 
         //新規作成されたクラス分類器
         this.createdClassifier = null;
@@ -93,7 +95,7 @@ export class WatsonVisualRecognitionNewClassifierController {
 
         //positiveExamplesで、クラス数が1つの場合は、ネガティブ画像が10個必要
         if (this.positiveExamplesArray.length === 1 && this.negativeExamples.length < 10) {
-          return false;
+            return false;
         }
 
         return true;
@@ -171,6 +173,7 @@ export class WatsonVisualRecognitionNewClassifierController {
         const positiveExampleDef = {};
         positiveExampleDef.className = "";
         positiveExampleDef.positiveExamples = [];
+        positiveExampleDef.fileType = this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE;
         this.positiveExamplesArray.push(positiveExampleDef);
     }
 
@@ -181,6 +184,33 @@ export class WatsonVisualRecognitionNewClassifierController {
         if (this.positiveExamplesArray.length >= 1) {
             this.positiveExamplesArray.pop();
         }
+    }
+
+    /**
+     * テンプレートHTMLのng-changeディレクティブでバインドされる関数
+     */
+    changePositiveUploadFileType(index, fileType) {
+
+        if (this.GlobalConstants.UPLOAD_FILETYPE_ZIP === fileType) {
+
+            const positiveExample = this.positiveExamplesArray[index];
+            positiveExample.fileType = this.GlobalConstants.UPLOAD_FILETYPE_ZIP;
+            positiveExample.positiveExamples = [];
+
+        } else if (this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE === fileType) {
+
+            const positiveExample = this.positiveExamplesArray[index];
+            positiveExample.fileType = this.GlobalConstants.UPLOAD_FILETYPE_SEPARATED_FILE;
+            positiveExample.positiveExamples = [];
+
+        }
+    }
+
+    /**
+     *テンプレートHTMLのng-changeディレクティブでバインドされる関数
+     */
+    changeNegativeUploadFileType(fileType) {
+        this.negativeExamples = [];
     }
 
     /**

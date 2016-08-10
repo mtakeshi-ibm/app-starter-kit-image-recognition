@@ -144,10 +144,10 @@ export class WatsonVisualRecognitionClassifierListController {
         this.$scope.chartOptions = {
             chart: {
                 type: 'pieChart',
-                labelType :'percent',
-                donut : true,
-                donutRatio : 0.35,
-                donutLabelsOutside : false,
+                labelType: 'percent',
+                donut: true,
+                donutRatio: 0.35,
+                donutLabelsOutside: false,
                 height: 400,
                 x: function(d) {
                     return d.key;
@@ -298,17 +298,27 @@ export class WatsonVisualRecognitionClassifierListController {
         const responsePromise = this.WatsonVisualRecognitionV3Service.listClassifiers();
 
         responsePromise.then((respdata) => {
-            //画面に成功メッセージを表示
-            this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
 
-            //this.$log.debug('レスポンスデータの数=' + respdata.data.classifiers.length);
+            if (respdata.data.status === 'ERROR') {
+                //エラー
+                this.$log.error('failed to retrieve list of classifiers. Response: ' + angular.toJson(respdata.data));
 
-            //チャートデータを更新
-            this._updateCachedClassifiers(respdata.data.classifiers);
+                //画面に失敗メッセージを表示
+                this.SharedService.addErrorMessage($translate.instant('message.server_failure_with_status_and_message', {
+                    status: respdata.data.status,
+                    message: respdata.data.statusInfo
+                }));
+            } else {
+                //画面に成功メッセージを表示
+                this.SharedService.addInfoMessage(this.$translate.instant('message.server_success'));
 
-            //
-            if (respdata.data !== null && (WatsonVisualRecognitionClassifierListController.isType('Array', respdata.data.classifiers) && respdata.data.classifiers.length === 0)) {
-                this.SharedService.addWarnMessage('No Classifiers.');
+                //チャートデータを更新
+                this._updateCachedClassifiers(respdata.data.classifiers);
+
+                //
+                if (respdata.data !== null && (WatsonVisualRecognitionClassifierListController.isType('Array', respdata.data.classifiers) && respdata.data.classifiers.length === 0)) {
+                    this.SharedService.addWarnMessage('No Classifiers.');
+                }
             }
 
         }).catch((resp) => {
