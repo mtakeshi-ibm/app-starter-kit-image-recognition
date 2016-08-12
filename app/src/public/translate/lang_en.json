@@ -30,7 +30,7 @@
         "text_007": "Owner(default:IBM provided Classifiers are off)",
         "text_008": "IBM",
         "text_009": "User Defined",
-        "text_010": "Target Classes:",
+        "text_010": "Target Classifiers:",
         "text_011": "All of Owner owned",
         "text_012": "Selected Classifiers Only",
         "text_013": "Elapsed time(ms)",

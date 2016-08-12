@@ -23,7 +23,8 @@ export class WatsonVisualRecognitionImageClassificationController {
         this.Upload = Upload;
         this.WatsonVisualRecognitionV3Service = WatsonVisualRecognitionV3Service;
 
-        this.targetClassesType = GlobalConstants.TARGET_CLASS_TYPE_ALL;
+        //
+        this.targetClassesType = this._configureTargetClassesType();
 
         //アップロードするファイル(配列) 初期値として空の配列をセット
         this.targetFile = [];
@@ -397,7 +398,7 @@ export class WatsonVisualRecognitionImageClassificationController {
         });
 
         //高さの調整
-        this.$scope.chartOptions.chart.height = retArray.length * 80;
+        this.$scope.chartOptions.chart.height = retArray.length * 150;
 
         return retArray;
     }
@@ -411,7 +412,22 @@ export class WatsonVisualRecognitionImageClassificationController {
             //return format(d);
             return d + '';
         };
-    };
+    }
+
+
+    /**
+     * アプリセッションデータとして、値が入っているかどうかを元に、this.targetClassesTypeにセットする定数を決定して返す
+     */
+    _configureTargetClassesType() {
+
+        const selectedClasses = this.getSelectedClassifiers();
+
+        if (selectedClasses.length > 0) {
+            return this.GlobalConstants.TARGET_CLASS_TYPE_SPECIFIED;
+        } else {
+            return this.GlobalConstants.TARGET_CLASS_TYPE_ALL;
+        }
+    }
 
 }
 
