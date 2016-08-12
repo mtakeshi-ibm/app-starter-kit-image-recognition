@@ -1,9 +1,7 @@
 {
     "title": {
         "test": "Test Message",
-        "app": "App StarterKit for Image Recognition",
-        "app_intro_001": "a Starter-Kit for proposals, demos, Proof-of-Concept projects using image recognition services.",
-        "app_intro_002": "Select an item on top menu bar or side menu panel.",
+        "app": "App Starter Kit - Image Recognition",
         "top": "Top",
         "menu_01": "Image Recognition by IBM Watson VR",
         "menu_01_intro_001" : "Image Recognition by IBM Watson VisualRecognition API(v3)",
@@ -32,7 +30,7 @@
         "text_007": "Owner(default:IBM provided Classifiers are off)",
         "text_008": "IBM",
         "text_009": "User Defined",
-        "text_010": "Target Classes:",
+        "text_010": "Target Classifiers:",
         "text_011": "All of Owner owned",
         "text_012": "Selected Classifiers Only",
         "text_013": "Elapsed time(ms)",

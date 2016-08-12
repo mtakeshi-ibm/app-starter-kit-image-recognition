@@ -1,9 +1,7 @@
 {
     "title": {
         "test": "テストメッセージ",
-        "app": "App StarterKit for Image Recognition",
-        "app_intro_001": "画像認識サービスを利用した提案、デモ、PoC、デリバリー活動を支援するスターターキット",
-        "app_intro_002": "利用内容をトップメニューまたはサイドメニューから選択してください。",
+        "app": "App Starter Kit - Image Recognition",
         "top": "Top",
         "menu_01": "IBM Watson VRによる画像認識",
         "menu_01_intro_001" : "IBM Watson VisualRecognition API(v3)を利用した画像認識サービス",
@@ -32,7 +30,7 @@
         "text_007": "対象とする分類器のオーナー(デフォルトはIBM提供の分類器はオフ)：",
         "text_008": "IBM",
         "text_009": "ユーザー定義",
-        "text_010": "対象クラス：",
+        "text_010": "対象分類器：",
         "text_011": "オーナーのすべての分類器",
         "text_012": "選択中の分類器のみ",
         "text_013": "分類所要時間(ms)：",
