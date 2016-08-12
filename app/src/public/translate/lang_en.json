@@ -1,9 +1,7 @@
 {
     "title": {
         "test": "Test Message",
-        "app": "App StarterKit for Image Recognition",
-        "app_intro_001": "a Starter-Kit for proposals, demos, Proof-of-Concept projects using image recognition services.",
-        "app_intro_002": "Select an item on top menu bar or side menu panel.",
+        "app": "App Starter Kit - Image Recognition",
         "top": "Top",
         "menu_01": "Image Recognition by IBM Watson VR",
         "menu_01_intro_001" : "Image Recognition by IBM Watson VisualRecognition API(v3)",

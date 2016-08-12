@@ -13,7 +13,7 @@
 
         <div class="form-group form-group-sm">
             <label class="control-label" for="targetFileInput"><span translate="label.text_006"></span></label>
-            <input id="targetFileInput" type="file" class="form-control" ngf-select ng-model="controller.targetFile" ngf-multiple="true" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="300MB" />
+            <input id="targetFileInput" type="file" class="form-control" ngf-select ng-model="controller.targetFile" ngf-multiple="true" ngf-pattern="'.png,.jpg,.jpeg'" ngf-accept="'.png,.jpg,.jpeg'" ngf-max-size="300MB" />
             <div ngf-drop ng-model="controller.targetFile" class="drop-box"><span translate="label.text_005"></span></div>
             <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
             <table class="table">
