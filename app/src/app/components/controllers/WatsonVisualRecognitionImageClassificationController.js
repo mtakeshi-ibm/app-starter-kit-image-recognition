@@ -162,6 +162,12 @@ export class WatsonVisualRecognitionImageClassificationController {
         //this.$log.debug("upload method is called.")
         this.clearMessages();
 
+        if (!this.isReadyToClassify()) {
+            //送信前提を満たしていない場合はエラーとして終了
+            this.SharedService.addErrorMessage(this.$translate.instant('message.text_018'));
+            return;
+        }
+
         let targetClassifiers = {};
 
         //ラジオボタンの設定によって、送信するかどうかのデータを切り替え
@@ -273,6 +279,19 @@ export class WatsonVisualRecognitionImageClassificationController {
         } else {
             //return ['Food_Processor', 'Cargo_Ship'];
             return selectedClassifiers;
+        }
+    }
+
+    /**
+     * 送信可能かどうかを判定
+     */
+    isReadyToClassify() {
+        const targetFileLength = this.targetFile.length;
+        // v3 API仕様に基づく制限(一度に判定できるファイル数は20まで(厳密には、ZIPとして送信するZIP内のファイル数が20まで、かつ、ZIPファイルサイズが5MBまで))
+        if (0 < targetFileLength && targetFileLength <= 20) {
+            return true;
+        } else {
+            return false;
         }
     }
 

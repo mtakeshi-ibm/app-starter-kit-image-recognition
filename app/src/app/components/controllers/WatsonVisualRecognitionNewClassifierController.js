@@ -86,8 +86,6 @@ export class WatsonVisualRecognitionNewClassifierController {
           return true;
         }
 
-
-
         // negativeExamplesのイメージ数が0でも、各クラスのPostiveイメージの合計が20以上なら問題無い
         //positiveExamplesの各イメージ数が10に満たない場合はNG
         this.positiveExamplesArray.forEach((value) => {

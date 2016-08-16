@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-    <!-- ジャンボトロンによるWelcomeメッセージ -->
+    <!-- pagetitle block -->
     <div class="jumbotron text-center">
         <h2><span translate="title.menu_01_03"></span></h2>
     </div>
@@ -15,15 +15,12 @@
             <label class="control-label" for="targetFileInput"><span translate="label.text_006"></span></label>
             <input id="targetFileInput" type="file" class="form-control" ngf-select ng-model="controller.targetFile" ngf-multiple="true" ngf-pattern="'.png,.jpg,.jpeg'" ngf-accept="'.png,.jpg,.jpeg'" ngf-max-size="300MB" />
             <div ngf-drop ng-model="controller.targetFile" class="drop-box"><span translate="label.text_005"></span></div>
-            <!-- NGだったやつ。意図せずngf-min-height="100"のようにすると画像選択しても捨てられる <input type="file" ngf-select ng-model="controller.targetFile" ngf-multiple="false" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" /> -->
             <table class="table">
                 <tr>
                     <th ng-repeat="i in controller.targetFile"># {{$index + 1}} : {{i.name}} ({{i.size|BytesFilter}})</th>
                 </tr>
                 <tr>
                     <td ng-repeat="i in controller.targetFile">
-                        <!-- <img ngf-thumbnail="controller.targetFile[i]" /> -->
-                        <!-- <img ngf-thumbnail="i" /> -->
                         <img ngf-src="i" ngf-resize="{width: 200, height: 200}"/>
                     </td>
                 </tr>
@@ -53,18 +50,8 @@
                 <h4><span ng-repeat="classifier in controller.getSelectedClassifiers()" class="label label-success">{{ classifier.name }}</span></h4>
                 <div ng-if="controller.getSelectedClassifiers() <= 0"><span translate="label.text_017"></span></div>
             </div>
-            <!--
-            <div class="form-group" ng-class="{'has-error': form.threshold.$dirty && form.threshold.$invalid}">
-                <label class="control-label" for="threshold"><span translate="label.text_015"></span></label>
-                <span class="help-inline text-danger" ng-messages="form.threshold.$error" ng-if="form.threshold.$dirty || form.$submitted">
-            <span ng-message="number"><span translate="validation_message.not_number"></span></span>
-                <span ng-message="min"><span translate="validation_message.less_than_zero"></span></span>
-                <span ng-message="max"><span translate="validation_message.greater_than_one"></span></span>
-                </span>
-                <input id="threshold" name="threshold" type="number" min="0" max="1.0" class="form-control" placeholder="threshold" ng-model="controller.threshold" />
-            </div>
-          -->
-            <!-- 閾値用 angularjs-slide によるスライダーUIコンポーネント -->
+
+            <!-- slider with angularjs-slide -->
             <div class="form-group">
                 <label class="control-label" for="threshold"><span translate="label.text_015"></span></label>
                 <rzslider name="threshold" rz-slider-model="controller.threshold" rz-slider-options="sliderOptions">></rzslider>
@@ -72,10 +59,10 @@
         </div>
 
         <div class="form-group">
-            <button class="btn btn-primary" ng-click="controller.upload()" ng-disabled="(!(controller.targetFile) || controller.targetFile.length === 0)"><span translate="label.text_016" /></button>
+            <button class="btn btn-primary" ng-click="controller.upload()" ng-disabled="!(controller.isReadyToClassify())"><span translate="label.text_016" /></button>
         </div>
         <div class="row" ng-show="elapsedTime.length >= 2">
-            <!-- サーバ側Node.jsからみた、WatsonVR API応答時間結果が正しくセットされていれば表示 -->
+            <!-- elapsed time -->
             <span class="label label-default"><span translate="label.text_013"></span>{{ elapsedTime[0] + '.'+ elapsedTime[1]/1000000 }}</span>
         </div>
 
