@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run server",
     "start-dev": "node ./index",
-    "start-dev-supervisor": "supervisor -s -t -i node_modules,package.json,src/app,upload -e node,js,json ./index"
+    "start-dev-supervisor": "supervisor -s -t -i node_modules,package.json,src/app,upload,logs -e node,js,json ./index"
   },
   "engines": {
     "node": ">=4.3.1"
