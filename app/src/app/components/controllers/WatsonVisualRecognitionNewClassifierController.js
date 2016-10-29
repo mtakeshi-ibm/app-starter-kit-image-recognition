@@ -82,18 +82,16 @@ export class WatsonVisualRecognitionNewClassifierController {
         }
 
         if (this.negativeExamples_fileType === this.GlobalConstants.UPLOAD_FILETYPE_ZIP && this.negativeExamples.length > 0) {
-          //ZIP型のアップロードが選択されている場合、ZIPファイル内の状況は不明なので、OKとするしかない
-          return true;
+            //ZIP型のアップロードが選択されている場合、ZIPファイル内の状況は不明なので、OKとするしかない
+            return true;
         }
-
-
 
         // negativeExamplesのイメージ数が0でも、各クラスのPostiveイメージの合計が20以上なら問題無い
         //positiveExamplesの各イメージ数が10に満たない場合はNG
         this.positiveExamplesArray.forEach((value) => {
 
             if (value.positiveExamples.fileType === this.GlobalConstants.UPLOAD_FILETYPE_ZIP && value.positiveExamples.length > 0) {
-              return true;
+                return true;
             }
 
             if (value.positiveExamples && value.positiveExamples.length < 10) {
@@ -150,11 +148,22 @@ export class WatsonVisualRecognitionNewClassifierController {
 
             this.SharedService.addInfoMessage(this.$translate.instant('message.text_011'));
         }, (resp) => {
-            //うまくresolve出来なかった場合。
-            this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status', {
-                'status': resp.status
-            }));
+
             this.$log.error('Error status: ' + resp.status);
+            if (resp.data) {
+                var errormsg = resp.data ? resp.data : "(no message)";
+                //画面に失敗メッセージを表示
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status_and_message', {
+                    status: resp.status,
+                    message: errormsg
+                }));
+            } else {
+                //応答データが存在しない場合
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status', {
+                    'status': resp.status
+                }));
+            }
+
         }, (evt) => {
             //const progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             //this.$log.info(angular.toJson(evt));

@@ -21,11 +21,11 @@ Utils.createZip = (fileInfoArray, arr) => {
     //   logger.app.debug('Utils#createZip:'+ idx + ' = ' + JSON.stringify(fileInfo));
     // });
 
-    if (fileInfoArray.length === 1 && fileInfoArray[0].originalname.toLowerCase().endsWith('.zip') ) {
-      //logger.app.debug('Utils#createZipでZIPファイルを検知：'+fileInfoArray[0].path);
-      // staticメソッドでThenable化して返す
-      arr.push(fileInfoArray[0].path);
-      return Promise.resolve(arr);
+    if (fileInfoArray.length === 1 && fileInfoArray[0].originalname.toLowerCase().endsWith('.zip')) {
+        //logger.app.debug('Utils#createZipでZIPファイルを検知：'+fileInfoArray[0].path);
+        // staticメソッドでThenable化して返す
+        arr.push(fileInfoArray[0].path);
+        return Promise.resolve(arr);
     }
 
     // ランダムに生成する文字列の長さ
@@ -104,6 +104,18 @@ Utils.deleteUplodedFiles = (fileInfoArray) => {
             }
         });
     }
+}
+
+/**
+ * JSON文字列かどうかを返却します。
+ */
+Utils.isJSONString = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 

@@ -310,7 +310,7 @@ export class WatsonVisualRecognitionClassifierListController {
                 this.$log.error('failed to retrieve list of classifiers. Response: ' + angular.toJson(respdata.data));
 
                 //画面に失敗メッセージを表示
-                this.SharedService.addErrorMessage($translate.instant('message.server_failure_with_status_and_message', {
+                this.SharedService.addErrorMessage(this.$translate.instant('message.server_failure_with_status_and_message', {
                     status: respdata.data.status,
                     message: respdata.data.statusInfo
                 }));

@@ -130,7 +130,7 @@ const handlerFunc = (req, res) => {
                     try {
                         const parsedBody = JSON.parse(response.body);
                         //Watson VR API仕様上、エラーJSONは code と error の2つのキーを持つ
-                        if (parsedBody && parsedBody.code && parsedBody.error) {
+                        if (parsedBody) {
                             res.status(response.statusCode).json(parsedBody);
                         } else {
                             res.status(response.statusCode).send("Server Error");

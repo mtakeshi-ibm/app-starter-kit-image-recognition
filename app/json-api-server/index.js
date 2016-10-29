@@ -6,11 +6,13 @@
 const express = require('express');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
+const basicAuth = require('basic-auth-connect');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
 const serve_static = require('serve-static');
 const cors = require('cors');
+const basicAuthHandlerFunction = require('./handlers/BasicAuthHandlerFunction');
 
 //initialize i18n modules
 const i18n = require('./initializers/I18nInit');
@@ -30,14 +32,13 @@ module.exports = (PORT) => {
     //リクエストログの出力設定
     if (app.get('env') === 'production') {
         app.use(morgan("production", {
-            format: 'combine',
-            immediate: true
+            format: 'combined',
+            immediate: false
         }));
     } else {
-        //app.use(morgan('short'));
         app.use(morgan("dev", {
-            format: 'dev',
-            immediate: true
+            format: 'combined',
+            immediate: false
         }));
     }
 
@@ -48,13 +49,21 @@ module.exports = (PORT) => {
     }));
     app.use(bodyParser.json());
     app.use(cookieParser());
+
+    //enabled basic auth if the values of environment variables are set.
+    const grantedBasicAuthUsername = process.env['BASIC_AUTH_USERNAME'];
+    const grantedBasicAuthPassword = process.env['BASIC_AUTH_PASSWORD'];
+    if (grantedBasicAuthUsername && grantedBasicAuthPassword) {
+        app.use(basicAuth(basicAuthHandlerFunction));
+    }
+
     app.use(serve_static(path.join(__dirname, '../dist')));
 
     // Enable CORS preflight across the board.
     app.options('*', cors());
     app.use(cors());
 
-    //i18nによる国際化対応のExporessへの組み込み
+    //i18nによる国際化対応のExpressへの組み込み
     app.use(i18n.init);
 
     //// Router ////
@@ -65,7 +74,7 @@ module.exports = (PORT) => {
 
     // production error handler
     // no stacktraces leaked to user
-    app.use( (err, req, res, next) => {
+    app.use((err, req, res, next) => {
         //res.status(err.status || 500);
         res.status(404).send('Sorry cant find that!');
         next(err);
