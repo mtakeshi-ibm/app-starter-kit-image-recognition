@@ -5,29 +5,29 @@ Sample or Demo web application as a scaffold for IBM Watson VisualRecognition AP
 
 ## Description
 
-feel free to use this as an useful study kit for AngularJS1.5, webpack buiding, IBM Watson VisualRecognition and so on.
+Feel free to use this as an useful study kit for AngularJS1.5, webpack buiding, IBM Watson VisualRecognition and so on.
 
 ## Requirement
 - AngularJS 1.5.7
 - IBM Watson Visual Recognition API(v3)  
-- Webpack (build tool)
+- Webpack (as a build tool or module bundler)
 - and so on.  
 Please see the package.json file.
 
 
 ## Install
-please execute :
+You clone this repository and execute the following command :
 
     $ npm install
 
 ## Usage
-Plese get an API key of 'IBM Watson VisualRecognition'.
+Please get an API key of 'IBM Watson VisualRecognition'.
 
 if you get it, put the key into either two placement.
 
-1. an environment variable [IBM_WATSON_VISUAL_RECOGNITION_API_KEY]
+1. An environment variable [IBM_WATSON_VISUAL_RECOGNITION_API_KEY]
 
-2. a json value at bluemix_service.watson_visualrecognition_v3.apiKey into app/config/defaut.json file
+2. A value at bluemix_service.watson_visualrecognition_v3.apiKey into app/config/defaut.json file
 
 
     $ cd app/
@@ -35,7 +35,14 @@ if you get it, put the key into either two placement.
     or
     $ npm run start-dev-supervisor
 
-    and access to http://localhost:8080/
+    and access to http://localhost:8080/ by a supported web browser.
+
+This app provides the BASIC authenticaton as a simple secure method. if you want to adopt it, please follow the steps.
+
+1. Set an environment variable [BASIC_AUTH_USERNAME] as your username.
+2. Set an environment variable [BASIC_AUTH_PASSWORD] as your password.
+3. Restage your applications.
+4. When accessing your app, you will see the basic authentication dialog on your web browser.
 
 ## Links
   * Website [IBM Watson VisualRecognition](https://www.ibm.com/watson/developercloud/visual-recognition.html)
@@ -43,7 +50,7 @@ if you get it, put the key into either two placement.
 ## Contribution
 
 
-## Licence
+## License
 
 Licensed under [MIT](https://github.com/mtakeshi-ibm/app-starter-kit-image-recognition/blob/master/LICENSE)
 
