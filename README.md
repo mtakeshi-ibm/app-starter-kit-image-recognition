@@ -37,6 +37,13 @@ if you get it, put the key into either two placement.
 
     and access to http://localhost:8080/ by a supported web browser.
 
+This app provides the BASIC authenticaton as a simple secure method. if you want to adopt it, please follow the steps.
+
+1. Set an environment variable [BASIC_AUTH_USERNAME] as your username.
+2. Set an environment variable [BASIC_AUTH_PASSWORD] as your password.
+3. Restage your applications.
+4. When accessing your app, you will see the basic authentication dialog on your web browser.
+
 ## Links
   * Website [IBM Watson VisualRecognition](https://www.ibm.com/watson/developercloud/visual-recognition.html)
 
