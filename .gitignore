@@ -10,14 +10,10 @@ app/dist/
 # temporary uploaded files
 app/upload/
 
-#
-app/logs/
-
 # Distributedfiles
 dist
 
 # Logs
-logs
 *.log
 npm-debug.log*
 
